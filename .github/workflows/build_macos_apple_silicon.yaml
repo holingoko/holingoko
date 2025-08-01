@@ -1,0 +1,51 @@
+name: Build Mac OS (Apple Silicon)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-14]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            **/requirements*.txt
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build Executable
+        uses: Nuitka/Nuitka-Action@main
+        with:
+          nuitka-version: main
+          script-name: HoLingoko.py
+          mode: app
+          enable-plugins: pyside6
+          include-data-dir: resources=resources
+          macos-app-icon: resources/images/icon.png
+
+      - name: Build Installer
+        run: |
+          mkdir build/dmg_source_folder
+          mv build/HoLingoko.app build/dmg_source_folder/HoLingoko.app
+          mac_os/create-dmg/create-dmg --icon HoLingoko.app 64 96 --app-drop-link 192 96 --icon-size 64 --no-internet-enable --text-size 14 --window-size 343 256 build/HoLingoko_Installer.dmg build/dmg_source_folder
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ runner.os }} build
+          path: |
+            build/*.dmg
+          include-hidden-files: true

@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+.venv
+__pycache__/
+_ignored/
+build/
+resources/holingoko/
+resources/holingoko.zip

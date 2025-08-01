@@ -1,0 +1,6 @@
+name = "HoLingoko"
+author = "HoLingoko"
+version = "0.9.0"
+github = "https://github.com/holingoko/holingoko"
+db_ext = ".db"
+zip_ext = ".dic"
