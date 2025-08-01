@@ -1,0 +1,1 @@
+git update-index --chmod=+x .\mac_os\create-dmg\create-dmg

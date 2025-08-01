@@ -37,6 +37,7 @@ def update_source_code_resource():
         ".git",
         ".idea",
         ".venv",
+        "_ignored",
         "build",
         "resources",
         source_code_dir_name,
