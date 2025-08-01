@@ -45,7 +45,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ runner.os }} Build
+          name: ${{ matrix.os }}_build
           path: |
             windows/Output/*.exe
           include-hidden-files: true

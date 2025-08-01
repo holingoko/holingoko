@@ -45,7 +45,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ runner.os }} build
+          name: ${{ matrix.os }}_build
           path: |
             build/*.dmg
           include-hidden-files: true
