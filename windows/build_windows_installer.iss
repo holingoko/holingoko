@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "HoLingoko"
-#define MyAppVersion "0.9.0"
+#define MyAppVersion "0.9.1"
 #define MyAppPublisher "Holingoko"
 #define MyAppURL "https://holingoko.github.io/holingoko/"
 #define MyAppExeName "HoLingoko.exe"

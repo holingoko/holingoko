@@ -71,17 +71,25 @@ class Tests(unittest.TestCase):
         tag_name1 = "name1"
         order1 = 0
         indexed1 = True
-        values_format1 = "values_format1"
+        long_values_format1 = "long_values_format1"
+        short_values_format1 = "short_values_format1"
         tag_id1 = self.db.tags.create_tag(
             tag_name1,
             indexed1,
-            values_format1,
+            long_values_format1,
+            short_values_format1,
             order1,
         )
         self.assertEqual(
             self.db.tags.get_all_tags(),
             [
-                (tag_id1, tag_name1, indexed1, values_format1),
+                (
+                    tag_id1,
+                    tag_name1,
+                    indexed1,
+                    long_values_format1,
+                    short_values_format1,
+                ),
             ],
         )
         self.assertEqual(self.db.tags.get_tag_name(tag_id1), tag_name1)
@@ -91,48 +99,87 @@ class Tests(unittest.TestCase):
             tag_id1,
             tag_name2,
             indexed1,
-            values_format1,
+            long_values_format1,
+            short_values_format1,
             order1,
         )
         self.assertEqual(
             self.db.tags.get_all_tags(),
             [
-                (tag_id1, tag_name2, indexed1, values_format1),
+                (
+                    tag_id1,
+                    tag_name2,
+                    indexed1,
+                    long_values_format1,
+                    short_values_format1,
+                ),
             ],
         )
         self.assertEqual(self.db.tags.get_tag_name(tag_id1), tag_name2)
         self.assertEqual(self.db.tags.get_tag_id(tag_name2), tag_id1)
         order2 = 1
         indexed2 = False
-        values_format2 = "values_format2"
+        long_values_format2 = "long_values_format2"
+        short_values_format2 = "short_values_format2"
         tag_id2 = self.db.tags.create_tag(
             tag_name1,
             indexed2,
-            values_format2,
+            long_values_format2,
+            short_values_format2,
             order2,
         )
         self.assertEqual(
             self.db.tags.get_all_tags(),
             [
-                (tag_id1, tag_name2, indexed1, values_format1),
-                (tag_id2, tag_name1, indexed2, values_format2),
+                (
+                    tag_id1,
+                    tag_name2,
+                    indexed1,
+                    long_values_format1,
+                    short_values_format1,
+                ),
+                (
+                    tag_id2,
+                    tag_name1,
+                    indexed2,
+                    long_values_format2,
+                    short_values_format2,
+                ),
             ],
         )
         self.db.tags.update_tag(
             tag_id2,
             tag_name1,
             indexed1,
-            values_format1,
+            long_values_format1,
+            short_values_format1,
             order1,
         )
         self.db.tags.update_tag(
-            tag_id1, tag_name2, indexed2, values_format2, order2
+            tag_id1,
+            tag_name2,
+            indexed2,
+            long_values_format2,
+            short_values_format2,
+            order2,
         )
         self.assertEqual(
             self.db.tags.get_all_tags(),
             [
-                (tag_id2, tag_name1, indexed1, values_format1),
-                (tag_id1, tag_name2, indexed2, values_format2),
+                (
+                    tag_id2,
+                    tag_name1,
+                    indexed1,
+                    long_values_format1,
+                    short_values_format1,
+                ),
+                (
+                    tag_id1,
+                    tag_name2,
+                    indexed2,
+                    long_values_format2,
+                    short_values_format2,
+                ),
             ],
         )
         self.db.tags.delete_tag(tag_id1)
@@ -145,11 +192,11 @@ class Tests(unittest.TestCase):
         form_id2 = self.db.forms.create_form(entry_id, 1)
         form_id3 = self.db.forms.create_form(entry_id, 2)
         form_id_t = self.db.forms.create_form(entry_id, 3)
-        tag_id1 = self.db.tags.create_tag("name1", True, "", 0)
-        tag_id2 = self.db.tags.create_tag("name2", True, "", 1)
-        tag_id3 = self.db.tags.create_tag("name3", True, "", 2)
-        tag_id4 = self.db.tags.create_tag("name4", True, "", 3)
-        tag_id5 = self.db.tags.create_tag("name5", False, "", 3)
+        tag_id1 = self.db.tags.create_tag("name1", True, "", "", 0)
+        tag_id2 = self.db.tags.create_tag("name2", True, "", "", 1)
+        tag_id3 = self.db.tags.create_tag("name3", True, "", "", 2)
+        tag_id4 = self.db.tags.create_tag("name4", True, "", "", 3)
+        tag_id5 = self.db.tags.create_tag("name5", False, "", "", 4)
         tag_value1 = "value1"
         tag_value2 = "value2"
         tag_value3 = "value3"

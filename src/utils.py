@@ -1,5 +1,7 @@
 import os
 
+import natsort
+
 from src import app_info
 from src import settings
 from src import state
@@ -43,7 +45,7 @@ def get_dict_list():
                 dict_list.append(dict_name)
     except FileNotFoundError:
         pass
-    return sorted(dict_list)
+    return natsort.natsorted(dict_list)
 
 
 def get_open_file_name(parent, caption):

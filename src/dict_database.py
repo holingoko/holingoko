@@ -99,11 +99,17 @@ class InfoTable:
         )
         return {row[0] for row in cursor.fetchall()}
 
-    def set_entry_format(self, value):
-        self.set_key_value("entry_format", value)
+    def set_long_entry_format(self, value):
+        self.set_key_value("long_entry_format", value)
 
-    def get_entry_format(self):
-        return self.get_key_value("entry_format")
+    def get_long_entry_format(self):
+        return self.get_key_value("long_entry_format")
+
+    def set_short_entry_format(self, value):
+        self.set_key_value("short_entry_format", value)
+
+    def get_short_entry_format(self):
+        return self.get_key_value("short_entry_format")
 
     def set_entry_joiner(self, value):
         self.set_key_value("entry_joiner", value)
@@ -290,7 +296,8 @@ class TagsTable:
                     "tag_id" INTEGER PRIMARY KEY,
                     "tag_name" TEXT,
                     "indexed" INTEGER,
-                    "tag_values_format" TEXT,
+                    "long_tag_values_format" TEXT,
+                    "short_tag_values_format" TEXT,
                     "order" INTEGER
                 ) STRICT;
             """,
@@ -301,7 +308,8 @@ class TagsTable:
         self,
         tag_name,
         indexed,
-        tag_values_format,
+        long_tag_values_format,
+        short_tag_values_format,
         order,
         tag_id=None,
     ):
@@ -312,12 +320,19 @@ class TagsTable:
                     INSERT INTO "tags" (
                         "tag_name",
                         "indexed",
-                        "tag_values_format",
+                        "long_tag_values_format",
+                        "short_tag_values_format",
                         "order"
                     )
-                    VALUES (?, ?, ?, ?);
+                    VALUES (?, ?, ?, ?, ?);
                 """,
-                (tag_name, indexed, tag_values_format, order),
+                (
+                    tag_name,
+                    indexed,
+                    long_tag_values_format,
+                    short_tag_values_format,
+                    order,
+                ),
             )
             self.connection.commit()
             tag_id = cursor.lastrowid
@@ -329,12 +344,20 @@ class TagsTable:
                         "tag_id",
                         "tag_name",
                         "indexed",
-                        "tag_values_format",
+                        "long_tag_values_format",
+                        "short_tag_values_format",
                         "order"
                     )
-                    VALUES (?, ?, ?, ?, ?);
+                    VALUES (?, ?, ?, ?, ?, ?);
                 """,
-                (tag_id, tag_name, indexed, tag_values_format, order),
+                (
+                    tag_id,
+                    tag_name,
+                    indexed,
+                    long_tag_values_format,
+                    short_tag_values_format,
+                    order,
+                ),
             )
             self.connection.commit()
         return tag_id
@@ -357,7 +380,8 @@ class TagsTable:
                     "tag_id",
                     "tag_name",
                     "indexed",
-                    "tag_values_format",
+                    "long_tag_values_format",
+                    "short_tag_values_format",
                     "order"
                 FROM "tags"
             """,
@@ -372,7 +396,8 @@ class TagsTable:
         tag_id,
         tag_name,
         indexed,
-        tag_values_format,
+        long_tag_values_format,
+        short_tag_values_format,
         order,
     ):
         self.connection.execute(
@@ -381,11 +406,19 @@ class TagsTable:
                 SET 
                     "tag_name" = ?,
                     "indexed" = ?,
-                    "tag_values_format" = ?,
+                    "long_tag_values_format" = ?,
+                    "short_tag_values_format" = ?,
                     "order" = ?
                 WHERE "tag_id" = ?
             """,
-            (tag_name, indexed, tag_values_format, order, tag_id),
+            (
+                tag_name,
+                indexed,
+                long_tag_values_format,
+                short_tag_values_format,
+                order,
+                tag_id,
+            ),
         )
         self.connection.commit()
 

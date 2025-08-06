@@ -1,7 +1,6 @@
 import os
 import threading
 
-from src import tools
 from src.qt import *
 
 
@@ -9,8 +8,19 @@ repo_dir = os.path.dirname(os.path.dirname(__file__))
 fonts_dir = os.path.join(repo_dir, "resources", "fonts")
 
 
+def paths_in_dir_recursive(base):
+    paths = []
+    for name in os.listdir(base):
+        path = os.path.join(base, name)
+        if os.path.isdir(path):
+            paths.extend(paths_in_dir_recursive(path))
+        else:
+            paths.append(path)
+    return paths
+
+
 def load_fonts():
-    for path in tools.paths_in_dir_recursive(fonts_dir):
+    for path in paths_in_dir_recursive(fonts_dir):
         QFontDatabase.addApplicationFont(path)
 
 

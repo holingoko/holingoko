@@ -1,3 +1,5 @@
+import natsort
+
 from src import dict_database_file
 from src import dict_settings_window
 from src import dict_template_window
@@ -100,7 +102,7 @@ class TemplateComboBox(ComboBox):
     def item_list(self):
         return (
             [tr("Select Template...")]
-            + sorted(self.template_dict.values())
+            + natsort.natsorted(self.template_dict.values())
             + [tr("Create Template...")]
         )
 

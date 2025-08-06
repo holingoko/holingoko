@@ -1,17 +1,19 @@
 import os
 
 from src import app
+from src import app_info
+from src import dict_database
 from src import dict_database_file
 from src import dict_entry_window
 from src import dict_settings_window
 from src import dict_template_window
 from src import dict_view
 from src import dict_window
-from src import examples
 from src import main_window
 from src import messages
 from src import settings
 from src import settings_window
+from src import state
 from src import system
 from src import text_editor
 from src import window
@@ -88,7 +90,6 @@ class NewText(ActionInstance):
                 fn = main_window.MainWindow(
                     ([text_editor.TextEditor.default_state()], None, None)
                 ).show
-
         fn()
 
     def on_update_language(self):
@@ -362,6 +363,26 @@ class CloseText(ActionInstance):
 
     def on_update_language(self):
         self._action.setText(tr("Close Text"))
+
+
+class CloseOtherTexts(ActionInstance):
+    _instance = None
+    default_shortcut = ""
+
+    @staticmethod
+    def on_action():
+        active_window = app.activeWindow()
+        try:
+            fn = active_window.on_close_other_texts
+        except AttributeError:
+            try:
+                fn = active_window.parent_window.on_close_other_texts
+            except AttributeError:
+                fn = lambda: None
+        fn()
+
+    def on_update_language(self):
+        self._action.setText(tr("Close Other Texts"))
 
 
 class CloseWindow(ActionInstance):
@@ -788,28 +809,39 @@ class CreateEntry(ActionInstance):
     def on_action():
         active_window = app.activeWindow()
         dict_views = active_window.findChildren(dict_view.DictView)
-        entries_created = 0
+        fns = dict()
         for dict_view_ in dict_views:
             try:
                 if dict_view_.db is None:
                     continue
-                fn = dict_view_.on_create_entry
-                entries_created += 1
+                fns[dict_view_.db.path] = dict_view_.on_create_entry
             except AttributeError:
-                fn = lambda: None
-            fn()
-        if not entries_created:
+                continue
+        if not fns:
             try:
                 db = active_window.db
-                if db is not None:
-                    fn = dict_entry_window.DictEntryWindow(db).show
-                    entries_created += 1
-                else:
-                    fn = lambda: None
             except AttributeError:
-                fn = lambda: None
+                db = None
+            if db is not None:
+                fns[db.path] = (
+                    lambda db_=db: dict_entry_window.DictEntryWindow(db).show()
+                )
+        if not fns:
+            path = os.path.join(
+                settings.dict_dir,
+                f"{state.last_selected_dict}{app_info.db_ext}",
+            )
+            if dict_database_file.is_dict_database_file(path):
+                db = dict_database.DictDatabase(path)
+            else:
+                db = None
+            if db is not None:
+                fns[db.path] = (
+                    lambda db_=db: dict_entry_window.DictEntryWindow(db).show()
+                )
+        for fn in fns.values():
             fn()
-        if not entries_created:
+        if not fns:
             messages.NoDictionarySelectedErrorMessage().show()
 
     def on_update_language(self):
@@ -851,23 +883,43 @@ class CreateTemplate(ActionInstance):
     def on_action():
         active_window = app.activeWindow()
         dict_views = active_window.findChildren(dict_view.DictView)
-        entries_created = 0
+        fns = dict()
         for dict_view_ in dict_views:
             try:
-                fn = dict_view_.on_create_template
-                entries_created += 1
+                if dict_view_.db is None:
+                    continue
+                fns[dict_view_.db.path] = dict_view_.on_create_template
             except AttributeError:
-                fn = lambda: None
-            fn()
-        if not entries_created:
+                continue
+        if not fns:
             try:
                 db = active_window.db
-                fn = dict_template_window.DictTemplateWindow(db).show
-                entries_created += 1
             except AttributeError:
-                fn = lambda: None
+                db = None
+            if db is not None:
+                fns[db.path] = (
+                    lambda db_=db: dict_template_window.DictTemplateWindow(
+                        db
+                    ).show()
+                )
+        if not fns:
+            path = os.path.join(
+                settings.dict_dir,
+                f"{state.last_selected_dict}{app_info.db_ext}",
+            )
+            if dict_database_file.is_dict_database_file(path):
+                db = dict_database.DictDatabase(path)
+            else:
+                db = None
+            if db is not None:
+                fns[db.path] = (
+                    lambda db_=db: dict_template_window.DictTemplateWindow(
+                        db
+                    ).show()
+                )
+        for fn in fns.values():
             fn()
-        if not entries_created:
+        if not fns:
             messages.NoDictionarySelectedErrorMessage().show()
 
     def on_update_language(self):

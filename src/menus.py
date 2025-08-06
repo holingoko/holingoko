@@ -1,8 +1,7 @@
 import os
-import shutil
+
 
 from src import actions
-from src import app_info
 from src import dict_database_file
 from src import examples
 from src import main_window
@@ -176,10 +175,8 @@ class HelpMenu(QMenu):
     def __init__(self, window_):
         super().__init__(window_)
         self.examples = Examples(window_)
-        self.source_code = SourceCode(window_)
         self.addAction(actions.About.action())
         self.addMenu(self.examples)
-        self.addMenu(self.source_code)
         self.addSeparator()
         self.on_update_language()
 
@@ -209,6 +206,7 @@ class TextEditorContextMenu(QMenu):
         self.addAction(actions.MoveTextRight.action())
         self.addSeparator()
         self.addAction(actions.CloseText.action())
+        self.addAction(actions.CloseOtherTexts.action())
         self.addSeparator()
 
 
@@ -245,6 +243,8 @@ class TagEditOrFormEditContextMenu(QMenu):
         self.addAction(actions.Paste.action())
         self.addSeparator()
         self.addAction(actions.Duplicate.action())
+        self.addSeparator()
+        self.addAction(actions.SelectAll.action())
         self.addSeparator()
         self.addAction(actions.AddAbove.action())
         self.addAction(actions.AddBelow.action())
@@ -681,38 +681,3 @@ class SetTagValuesFormatMenu(SetEntryFormatMenu):
         self.setTitle(tr("Set Tag Values Format"))
         self.escaped_characters.setText(tr("Escaped Ellipsis"))
         self.right_to_left_language.setText("Right To Left Language")
-
-
-class SourceCode(QMenu):
-    def __init__(self, window_):
-        super().__init__(window_)
-        self.local = QAction()
-        self.remote = QAction()
-        self.addAction(self.local)
-        self.addAction(self.remote)
-        self.addSeparator()
-        self.local.triggered.connect(self.on_local)
-        self.remote.triggered.connect(self.on_remote)
-        self.on_update_language()
-
-    def on_local(self):
-        repo_dir = os.path.dirname(os.path.dirname(__file__))
-        zip_name = f"{app_info.name.lower()}.zip"
-        zip_path = os.path.join(repo_dir, "resources", zip_name)
-        path = utils.get_save_file_name(
-            self,
-            tr("Save"),
-            zip_name,
-        )
-        if not path:
-            return
-        shutil.copyfile(zip_path, path)
-
-    @staticmethod
-    def on_remote():
-        QDesktopServices.openUrl(QUrl(app_info.github))
-
-    def on_update_language(self):
-        self.setTitle(tr("Source Code"))
-        self.local.setText(tr("Local"))
-        self.remote.setText(tr("Remote"))

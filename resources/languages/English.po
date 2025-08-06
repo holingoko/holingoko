@@ -130,6 +130,9 @@ msgstr "Close"
 msgid "Close All Windows"
 msgstr "Close All Windows"
 
+msgid "Close Other Texts"
+msgstr "Close Other Texts"
+
 msgid "Close Text"
 msgstr "Close Text"
 
@@ -294,9 +297,6 @@ msgstr "English"
 
 msgid "English Example"
 msgstr "English Example"
-
-msgid "Entry Format:"
-msgstr "Entry Format:"
 
 msgid "Entry Joiner:"
 msgstr "Entry Joiner:"
@@ -511,9 +511,6 @@ msgstr "Line Down"
 msgid "Line Up"
 msgstr "Line Up"
 
-msgid "Local"
-msgstr "Local"
-
 msgid "Lock All Texts"
 msgstr "Lock All Texts"
 
@@ -522,6 +519,15 @@ msgstr "Lock Text"
 
 msgid "Logging Directory"
 msgstr "Logging Directory"
+
+msgid "Long Entry Format"
+msgstr "Long Entry Format"
+
+msgid "Long Entry Format:"
+msgstr "Long Entry Format:"
+
+msgid "Long Tag Values Format"
+msgstr "Long Tag Values Format"
 
 msgid "Manage Dictionaries..."
 msgstr "Manage Dictionaries..."
@@ -625,9 +631,6 @@ msgstr "No dictionary is selected."
 msgid "No entry is selected."
 msgstr "No entry is selected."
 
-msgid "No matching entries found."
-msgstr "No matching entries found."
-
 msgid "No template is selected."
 msgstr "No template is selected."
 
@@ -649,11 +652,17 @@ msgstr "Number Of Spaces Per Tab"
 msgid "OK"
 msgstr "OK"
 
+msgid "Off"
+msgstr "Off"
+
 msgid "On Click"
 msgstr "On Click"
 
 msgid "On Double Click"
 msgstr "On Double Click"
+
+msgid "On Every Restart"
+msgstr "On Every Restart"
 
 msgid "On Move Popup Shortcut Keys, Move By"
 msgstr "On Move Popup Shortcut Keys, Move By"
@@ -666,6 +675,9 @@ msgstr "On Move Side Bar Position Shortcut Keys, Move By"
 
 msgid "On Move Side Bar Position Shortcut Keys, Move Cursor Also"
 msgstr "On Move Side Bar Position Shortcut Keys, Move Cursor Also"
+
+msgid "On Next Restart"
+msgstr "On Next Restart"
 
 msgid "One or more dictionaries could not be automatically copied into the new dictionary directory. Please copy any missing dictionaries from the old dictionary directory manually."
 msgstr "One or more dictionaries could not be automatically copied into the new dictionary directory. Please copy any missing dictionaries from the old dictionary directory manually."
@@ -748,9 +760,6 @@ msgstr "Redo"
 msgid "Remember Window Geometry"
 msgstr "Remember Window Geometry"
 
-msgid "Remote"
-msgstr "Remote"
-
 msgid "Rename Text..."
 msgstr "Rename Text..."
 
@@ -774,6 +783,12 @@ msgstr "Replace Previous"
 
 msgid "Replace:"
 msgstr "Replace:"
+
+msgid "Reset All Settings"
+msgstr "Reset All Settings"
+
+msgid "Reset All State"
+msgstr "Reset All State"
 
 msgid "Right"
 msgstr "Right"
@@ -889,8 +904,17 @@ msgstr "Settings Window Default Width"
 msgid "Settings..."
 msgstr "Settings..."
 
+msgid "Short Entry Format"
+msgstr "Short Entry Format"
+
+msgid "Short Entry Format:"
+msgstr "Short Entry Format:"
+
 msgid "Short Entry Length"
 msgstr "Short Entry Length"
+
+msgid "Short Tag Values Format"
+msgstr "Short Tag Values Format"
 
 msgid "Shortcuts"
 msgstr "Shortcuts"
@@ -949,9 +973,6 @@ msgstr "Simple Example"
 msgid "Simplified"
 msgstr "Simplified"
 
-msgid "Source Code"
-msgstr "Source Code"
-
 msgid "Space Around Widgets"
 msgstr "Space Around Widgets"
 
@@ -1002,9 +1023,6 @@ msgstr "Tag 2"
 
 msgid "Tag 3"
 msgstr "Tag 3"
-
-msgid "Tag Values Format"
-msgstr "Tag Values Format"
 
 msgid "Tags:"
 msgstr "Tags:"
@@ -1057,8 +1075,8 @@ msgstr "The dictionary template has unsaved changes that will be lost if the win
 msgid "The dictionary was created in a directory other than the dictionary directory and so will not be visible to the application. The dictionary directory can be changed via settings."
 msgstr "The dictionary was created in a directory other than the dictionary directory and so will not be visible to the application. The dictionary directory can be changed via settings."
 
-msgid "The dictionary {} cannot be overwritten because its database file is being used by some program."
-msgstr "The dictionary {} cannot be overwritten because its database file is being used by some program."
+msgid "The dictionary {} cannot be overwritten because its database file is currently being used."
+msgstr "The dictionary {} cannot be overwritten because its database file is currently being used."
 
 msgid "The dictionary {} has unsaved changes that will be lost if the window is closed."
 msgstr "The dictionary {} has unsaved changes that will be lost if the window is closed."
@@ -1092,9 +1110,6 @@ msgstr "The file {} is not a text file or a dictionary."
 
 msgid "The files {} are about to be closed without saving."
 msgstr "The files {} are about to be closed without saving."
-
-msgid "The language {} could not be found. The application language has been reset to the default."
-msgstr "The language {} could not be found. The application language has been reset to the default."
 
 msgid "The language {} is missing one or more translations, so some text in the application may not be properly translated."
 msgstr "The language {} is missing one or more translations, so some text in the application may not be properly translated."
@@ -1138,8 +1153,11 @@ msgstr "The text {} was not found."
 msgid "The theme {} could not be applied because it has an invalid style sheet. The application theme has been reset to the default."
 msgstr "The theme {} could not be applied because it has an invalid style sheet. The application theme has been reset to the default."
 
-msgid "The theme {} could not be found. The application theme has been reset to the default."
-msgstr "The theme {} could not be found. The application theme has been reset to the default."
+msgid "The value for tag {0} for column {1} is invalid. See \"Examples\" under the \"Help\" menu for examples of how to set tag values format."
+msgstr "The value for tag {0} for column {1} is invalid. See \"Examples\" under the \"Help\" menu for examples of how to set tag values format."
+
+msgid "The value for {} is invalid. See \"Examples\" under the \"Help\" menu for examples of how to set entry format."
+msgstr "The value for {} is invalid. See \"Examples\" under the \"Help\" menu for examples of how to set entry format."
 
 msgid "Theme"
 msgstr "Theme"

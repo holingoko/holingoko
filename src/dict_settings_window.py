@@ -38,8 +38,10 @@ class DictSettingsWindow(window.Window):
         self.dict_combo_box = combo_box.DictComboBox(
             self.on_dict_changed_pending
         )
-        self.entry_format_label = label.SelectableLabel(self)
-        self.entry_format_line_edit = line_edit.LineEdit(self)
+        self.long_entry_format_label = label.SelectableLabel(self)
+        self.long_entry_format_line_edit = line_edit.LineEdit(self)
+        self.short_entry_format_label = label.SelectableLabel(self)
+        self.short_entry_format_line_edit = line_edit.LineEdit(self)
         self.entry_joiner_label = label.SelectableLabel(self)
         self.entry_joiner_line_edit = line_edit.LineEdit(self)
         self.tags_label = label.SelectableLabel(self)
@@ -62,8 +64,10 @@ class DictSettingsWindow(window.Window):
         self.layout().setMenuBar(menus.DictMenuBar(self))
         self.layout().addWidget(self.dict_label)
         self.layout().addWidget(self.dict_combo_box)
-        self.layout().addWidget(self.entry_format_label)
-        self.layout().addWidget(self.entry_format_line_edit)
+        self.layout().addWidget(self.long_entry_format_label)
+        self.layout().addWidget(self.long_entry_format_line_edit)
+        self.layout().addWidget(self.short_entry_format_label)
+        self.layout().addWidget(self.short_entry_format_line_edit)
         self.layout().addWidget(self.entry_joiner_label)
         self.layout().addWidget(self.entry_joiner_line_edit)
         self.layout().addWidget(self.tags_label)
@@ -119,7 +123,8 @@ class DictSettingsWindow(window.Window):
 
     def get_data(self):
         return (
-            self.entry_format_line_edit.text(),
+            self.long_entry_format_line_edit.text(),
+            self.short_entry_format_line_edit.text(),
             self.entry_joiner_line_edit.text(),
             self.tag_list_edit.get_row_data(),
         )
@@ -155,24 +160,31 @@ class DictSettingsWindow(window.Window):
         if not os.path.exists(path):
             self.db = None
             self.tag_list_edit.set_row_data([])
-            self.entry_format_line_edit.setText("")
+            self.long_entry_format_line_edit.setText("")
+            self.short_entry_format_line_edit.setText("")
             self.entry_joiner_line_edit.setText("")
             self.tag_list_edit.block_add_row = True
-            self.entry_format_line_edit.setReadOnly(True)
+            self.long_entry_format_line_edit.setReadOnly(True)
+            self.short_entry_format_line_edit.setReadOnly(True)
             self.entry_joiner_line_edit.setReadOnly(True)
         else:
             self.db = dict_database.DictDatabase(path)
             tags = self.db.tags.get_all_tags()
             self.tag_list_edit.set_row_data(tags)
-            self.entry_format_line_edit.setText(
-                self.db.info.get_entry_format()
+            self.long_entry_format_line_edit.setText(
+                self.db.info.get_long_entry_format()
+            )
+            self.short_entry_format_line_edit.setText(
+                self.db.info.get_short_entry_format()
             )
             self.entry_joiner_line_edit.setText(
                 self.db.info.get_entry_joiner()
             )
             self.tag_list_edit.block_add_row = False
-            self.entry_format_line_edit.setReadOnly(False)
+            self.long_entry_format_line_edit.setReadOnly(False)
+            self.short_entry_format_line_edit.setReadOnly(False)
             self.entry_joiner_line_edit.setReadOnly(False)
+            state.last_selected_dict = name
         self.saved_data = self.get_data()
 
     def on_close(self):
@@ -226,13 +238,38 @@ class DictSettingsWindow(window.Window):
         empty_tag_values_format_tag_names = []
         non_arbitrary_tag_values_format_tag_names = []
         has_indexed_tags = False
-        for _, tag_name, indexed, tag_values_format in tag_data:
+        for (
+            _,
+            tag_name,
+            indexed,
+            long_tag_values_format,
+            short_tag_values_format,
+        ) in tag_data:
+            if not dict_format.Formatter.check_tag_values_format(
+                long_tag_values_format
+            ):
+                messages.InvalidTagValuesFormatErrorMessage(
+                    tr("Long Tag Values Format"),
+                    tag_name,
+                ).show()
+                return False
+            if not dict_format.Formatter.check_tag_values_format(
+                short_tag_values_format
+            ):
+                messages.InvalidTagValuesFormatErrorMessage(
+                    tr("Short Tag Values Format"),
+                    tag_name,
+                ).show()
+                return False
             has_indexed_tags = has_indexed_tags or indexed
             if not dict_re.check_tag_valid(tag_name):
                 invalid_tag_names.append(tag_name)
-            if not tag_values_format:
+            if not long_tag_values_format and not short_tag_values_format:
                 empty_tag_values_format_tag_names.append(tag_name)
-            elif not "..." in tag_values_format:
+            elif (
+                not "..." in long_tag_values_format
+                and not "..." in short_tag_values_format
+            ):
                 non_arbitrary_tag_values_format_tag_names.append(tag_name)
         if invalid_tag_names:
             messages.InvalidTagErrorMessage(invalid_tag_names).show()
@@ -278,11 +315,28 @@ class DictSettingsWindow(window.Window):
                 tag_id = prev_tag_name_to_id[tag_name]
                 self.db.tags.delete_tag(tag_id)
                 self.db.tag_rows.delete_rows_for_tag(tag_id)
-        entry_format = self.entry_format_line_edit.text()
-        entry_format_tags = dict_format.Formatter.entry_format_tags(
-            entry_format
+        long_entry_format = self.long_entry_format_line_edit.text()
+        short_entry_format = self.short_entry_format_line_edit.text()
+        if not dict_format.Formatter.check_entry_format(long_entry_format):
+            messages.InvalidEntryFormatErrorMessage(
+                tr("Long Entry Format"),
+            ).show()
+            return False
+        if not dict_format.Formatter.check_entry_format(short_entry_format):
+            messages.InvalidEntryFormatErrorMessage(
+                tr("Short Entry Format"),
+            ).show()
+            return False
+        long_entry_format_tags = dict_format.Formatter.entry_format_tags(
+            long_entry_format
         )
-        missing_tags = entry_format_tags - tag_names_set
+        short_entry_format_tags = dict_format.Formatter.entry_format_tags(
+            short_entry_format
+        )
+        missing_tags = (
+            set.union(long_entry_format_tags, short_entry_format_tags)
+            - tag_names_set
+        )
         if missing_tags:
             if not self.on_warning(
                 warnings_ignored,
@@ -290,13 +344,15 @@ class DictSettingsWindow(window.Window):
                 missing_tags,
             ):
                 return False
-        self.db.info.set_entry_format(entry_format)
+        self.db.info.set_long_entry_format(long_entry_format)
+        self.db.info.set_short_entry_format(short_entry_format)
         self.db.info.set_entry_joiner(self.entry_joiner_line_edit.text())
         for order, (
             tag_id,
             tag_name,
             indexed,
-            tag_values_format,
+            long_tag_values_format,
+            short_tag_values_format,
         ) in enumerate(self.tag_list_edit.get_row_data()):
             if tag_id is None:
                 tag_id = prev_tag_name_to_id.get(tag_name, None)
@@ -305,14 +361,16 @@ class DictSettingsWindow(window.Window):
                     tag_id,
                     tag_name,
                     indexed,
-                    tag_values_format,
+                    long_tag_values_format,
+                    short_tag_values_format,
                     order,
                 )
             else:
                 self.db.tags.create_tag(
                     tag_name,
                     indexed,
-                    tag_values_format,
+                    long_tag_values_format,
+                    short_tag_values_format,
                     order,
                 )
         self.saved_data = self.get_data()
@@ -324,7 +382,8 @@ class DictSettingsWindow(window.Window):
     def on_update_language(self):
         self.setWindowTitle(tr("Dictionary Settings"))
         self.dict_label.setText(tr("Dictionary:"))
-        self.entry_format_label.setText(tr("Entry Format:"))
+        self.long_entry_format_label.setText(tr("Long Entry Format:"))
+        self.short_entry_format_label.setText(tr("Short Entry Format:"))
         self.entry_joiner_label.setText(tr("Entry Joiner:"))
         self.tags_label.setText(tr("Tags:"))
         self.close_button.setText(tr("Close"))

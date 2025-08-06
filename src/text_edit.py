@@ -399,6 +399,10 @@ class _TextEdit(QTextEdit):
         else:
             return str1.lower() == str2.lower()
 
+    @property
+    def text_editor(self):
+        return self.parent().parent().parent()
+
     def contextMenuEvent(self, event):
         self.context_menu.move(event.globalPos())
         self.context_menu.show()
@@ -428,7 +432,7 @@ class _TextEdit(QTextEdit):
                 is_file = True
                 self.main_window.handle_dropped_file(
                     os.path.normpath(path),
-                    self.parent().parent(),
+                    self.text_editor,
                 )
         if is_file:
             return
@@ -459,7 +463,7 @@ class _TextEdit(QTextEdit):
             }:
                 return
             messages.TextLockedWarningMessage(
-                self.parent().parent().file_name,
+                self.text_editor.file_name,
                 lambda: self.setReadOnly(False),
             ).show()
             return
@@ -600,7 +604,7 @@ class _TextEdit(QTextEdit):
     def undo(self):
         if self.isReadOnly():
             messages.TextLockedWarningMessage(
-                self.parent().parent().file_name,
+                self.text_editor.file_name,
                 lambda: self.setReadOnly(False),
             ).show()
             return
@@ -609,7 +613,7 @@ class _TextEdit(QTextEdit):
     def redo(self):
         if self.isReadOnly():
             messages.TextLockedWarningMessage(
-                self.parent().parent().file_name,
+                self.text_editor.file_name,
                 lambda: self.setReadOnly(False),
             ).show()
             return
@@ -618,7 +622,7 @@ class _TextEdit(QTextEdit):
     def cut(self):
         if self.isReadOnly():
             messages.TextLockedWarningMessage(
-                self.parent().parent().file_name,
+                self.text_editor.file_name,
                 lambda: self.setReadOnly(False),
             ).show()
             return
@@ -627,7 +631,7 @@ class _TextEdit(QTextEdit):
     def paste(self):
         if self.isReadOnly():
             messages.TextLockedWarningMessage(
-                self.parent().parent().file_name,
+                self.text_editor.file_name,
                 lambda: self.setReadOnly(False),
             ).show()
             return
@@ -1238,12 +1242,12 @@ class _TextEdit(QTextEdit):
             flags = flags | QTextDocument.FindFlag.FindCaseSensitively
         if not self.find(find_text, flags):
             if wrap_around:
-                selection = self.parent().selection()
+                selection = self.parent().parent().selection()
                 text_cursor = self.textCursor()
                 text_cursor.movePosition(start_or_end)
                 self.setTextCursor(text_cursor)
                 if not self.find(find_text, flags):
-                    self.parent().set_selection(selection)
+                    self.parent().parent().set_selection(selection)
                     if show_message:
                         messages.TextNotFoundInfoMessage(find_text).show()
                     return False
@@ -1346,8 +1350,8 @@ class _TextEdit(QTextEdit):
         replace_text,
         match_case,
     ):
-        parent = self.parent()
-        selection = parent.selection()
+        parent_parent = self.parent().parent()
+        selection = parent_parent.selection()
         text_in = self.toPlainText()
         pattern = re.compile(
             re.escape(find_text), re.NOFLAG if match_case else re.IGNORECASE
@@ -1358,7 +1362,7 @@ class _TextEdit(QTextEdit):
         text_cursor.select(QTextCursor.SelectionType.Document)
         text_cursor.insertText(text_out)
         text_cursor.endEditBlock()
-        parent.set_selection(selection)
+        parent_parent.set_selection(selection)
 
     def on_replace_text_edited(self, text):
         self.replace_text = text

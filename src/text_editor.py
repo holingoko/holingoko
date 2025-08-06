@@ -379,6 +379,9 @@ class TextEditor(QWidget):
         return path
 
     def on_close(self, if_close_successful=lambda: None):
+        if settings.text_editor_autosave and os.path.exists(self.path):
+            self.on_save()
+
         def close():
             self.remove()
             if_close_successful()

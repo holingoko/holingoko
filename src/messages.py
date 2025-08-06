@@ -834,6 +834,25 @@ class FileIsNotTextOrDictionaryErrorMessage(ErrorMessage):
         return [lambda: None]
 
 
+class InvalidEntryFormatErrorMessage(ErrorMessage):
+    def __init__(self, which):
+        super().__init__([quote(which)])
+
+    @staticmethod
+    def message_text():
+        return tr(
+            'The value for {} is invalid. See "Examples" under the "Help" menu for examples of how to set entry format.'
+        )
+
+    @staticmethod
+    def button_texts():
+        return [tr("OK")]
+
+    @staticmethod
+    def button_actions():
+        return [lambda: None]
+
+
 class InvalidTagErrorMessage(ErrorMessage):
     def __init__(self, tags):
         super().__init__(
@@ -862,6 +881,30 @@ class InvalidTagErrorMessage(ErrorMessage):
         return [lambda: None]
 
 
+class InvalidTagValuesFormatErrorMessage(ErrorMessage):
+    def __init__(self, column_name, tag_name):
+        super().__init__(
+            [
+                quote(tag_name),
+                quote(column_name),
+            ]
+        )
+
+    @staticmethod
+    def message_text():
+        return tr(
+            'The value for tag {0} for column {1} is invalid. See "Examples" under the "Help" menu for examples of how to set tag values format.'
+        )
+
+    @staticmethod
+    def button_texts():
+        return [tr("OK")]
+
+    @staticmethod
+    def button_actions():
+        return [lambda: None]
+
+
 class InvalidThemeErrorMessage(ErrorMessage):
     def __init__(self, name):
         super().__init__([quote(name)])
@@ -870,44 +913,6 @@ class InvalidThemeErrorMessage(ErrorMessage):
     def message_text():
         return tr(
             "The theme {} could not be applied because it has an invalid style sheet. The application theme has been reset to the default."
-        )
-
-    @staticmethod
-    def button_texts():
-        return [tr("OK")]
-
-    @staticmethod
-    def button_actions():
-        return [lambda: None]
-
-
-class MissingLanguageErrorMessage(ErrorMessage):
-    def __init__(self, name):
-        super().__init__([quote(name)])
-
-    @staticmethod
-    def message_text():
-        return tr(
-            "The language {} could not be found. The application language has been reset to the default."
-        )
-
-    @staticmethod
-    def button_texts():
-        return [tr("OK")]
-
-    @staticmethod
-    def button_actions():
-        return [lambda: None]
-
-
-class MissingThemeErrorMessage(ErrorMessage):
-    def __init__(self, name):
-        super().__init__([quote(name)])
-
-    @staticmethod
-    def message_text():
-        return tr(
-            "The theme {} could not be found. The application theme has been reset to the default."
         )
 
     @staticmethod
@@ -1037,7 +1042,7 @@ class OverwriteDictionaryFailedErrorMessage(ErrorMessage):
     @staticmethod
     def message_text():
         return tr(
-            "The dictionary {} cannot be overwritten because its database file is being used by some program."
+            "The dictionary {} cannot be overwritten because its database file is currently being used."
         )
 
     @staticmethod

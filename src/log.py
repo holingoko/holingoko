@@ -33,6 +33,5 @@ def log(run):
         try:
             run()
         except:
-            exception = traceback.format_exc()
-            print(exception)
+            print(traceback.format_exc())
         log_file.write(time.strftime("\n\nLog End:\t\t%H:%M:%S\n"))

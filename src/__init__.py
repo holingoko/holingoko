@@ -34,7 +34,6 @@ class Application(QApplication):
             if (
                 event_type == QEvent.Type.ShortcutOverride
                 and not self.ignore_shortcuts
-                and event.text()
             ):
                 key_sequence = (
                     QKeySequence(event.keyCombination())

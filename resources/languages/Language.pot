@@ -130,6 +130,9 @@ msgstr ""
 msgid "Close All Windows"
 msgstr ""
 
+msgid "Close Other Texts"
+msgstr ""
+
 msgid "Close Text"
 msgstr ""
 
@@ -293,9 +296,6 @@ msgid "English"
 msgstr ""
 
 msgid "English Example"
-msgstr ""
-
-msgid "Entry Format:"
 msgstr ""
 
 msgid "Entry Joiner:"
@@ -511,9 +511,6 @@ msgstr ""
 msgid "Line Up"
 msgstr ""
 
-msgid "Local"
-msgstr ""
-
 msgid "Lock All Texts"
 msgstr ""
 
@@ -521,6 +518,15 @@ msgid "Lock Text"
 msgstr ""
 
 msgid "Logging Directory"
+msgstr ""
+
+msgid "Long Entry Format"
+msgstr ""
+
+msgid "Long Entry Format:"
+msgstr ""
+
+msgid "Long Tag Values Format"
 msgstr ""
 
 msgid "Manage Dictionaries..."
@@ -625,9 +631,6 @@ msgstr ""
 msgid "No entry is selected."
 msgstr ""
 
-msgid "No matching entries found."
-msgstr ""
-
 msgid "No template is selected."
 msgstr ""
 
@@ -649,10 +652,16 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
+msgid "Off"
+msgstr ""
+
 msgid "On Click"
 msgstr ""
 
 msgid "On Double Click"
+msgstr ""
+
+msgid "On Every Restart"
 msgstr ""
 
 msgid "On Move Popup Shortcut Keys, Move By"
@@ -665,6 +674,9 @@ msgid "On Move Side Bar Position Shortcut Keys, Move By"
 msgstr ""
 
 msgid "On Move Side Bar Position Shortcut Keys, Move Cursor Also"
+msgstr ""
+
+msgid "On Next Restart"
 msgstr ""
 
 msgid "One or more dictionaries could not be automatically copied into the new dictionary directory. Please copy any missing dictionaries from the old dictionary directory manually."
@@ -748,9 +760,6 @@ msgstr ""
 msgid "Remember Window Geometry"
 msgstr ""
 
-msgid "Remote"
-msgstr ""
-
 msgid "Rename Text..."
 msgstr ""
 
@@ -773,6 +782,12 @@ msgid "Replace Previous"
 msgstr ""
 
 msgid "Replace:"
+msgstr ""
+
+msgid "Reset All Settings"
+msgstr ""
+
+msgid "Reset All State"
 msgstr ""
 
 msgid "Right"
@@ -889,7 +904,16 @@ msgstr ""
 msgid "Settings..."
 msgstr ""
 
+msgid "Short Entry Format"
+msgstr ""
+
+msgid "Short Entry Format:"
+msgstr ""
+
 msgid "Short Entry Length"
+msgstr ""
+
+msgid "Short Tag Values Format"
 msgstr ""
 
 msgid "Shortcuts"
@@ -949,9 +973,6 @@ msgstr ""
 msgid "Simplified"
 msgstr ""
 
-msgid "Source Code"
-msgstr ""
-
 msgid "Space Around Widgets"
 msgstr ""
 
@@ -1001,9 +1022,6 @@ msgid "Tag 2"
 msgstr ""
 
 msgid "Tag 3"
-msgstr ""
-
-msgid "Tag Values Format"
 msgstr ""
 
 msgid "Tags:"
@@ -1057,7 +1075,7 @@ msgstr ""
 msgid "The dictionary was created in a directory other than the dictionary directory and so will not be visible to the application. The dictionary directory can be changed via settings."
 msgstr ""
 
-msgid "The dictionary {} cannot be overwritten because its database file is being used by some program."
+msgid "The dictionary {} cannot be overwritten because its database file is currently being used."
 msgstr ""
 
 msgid "The dictionary {} has unsaved changes that will be lost if the window is closed."
@@ -1091,9 +1109,6 @@ msgid "The file {} is not a text file or a dictionary."
 msgstr ""
 
 msgid "The files {} are about to be closed without saving."
-msgstr ""
-
-msgid "The language {} could not be found. The application language has been reset to the default."
 msgstr ""
 
 msgid "The language {} is missing one or more translations, so some text in the application may not be properly translated."
@@ -1138,7 +1153,10 @@ msgstr ""
 msgid "The theme {} could not be applied because it has an invalid style sheet. The application theme has been reset to the default."
 msgstr ""
 
-msgid "The theme {} could not be found. The application theme has been reset to the default."
+msgid "The value for tag {0} for column {1} is invalid. See \"Examples\" under the \"Help\" menu for examples of how to set tag values format."
+msgstr ""
+
+msgid "The value for {} is invalid. See \"Examples\" under the \"Help\" menu for examples of how to set entry format."
 msgstr ""
 
 msgid "Theme"

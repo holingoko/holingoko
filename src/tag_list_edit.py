@@ -13,11 +13,13 @@ class TagListHeader(QWidget):
     def __init__(self):
         super().__init__()
         self.name_label = label.SelectableLabel(self)
-        self.tag_values_format_label = label.SelectableLabel(self)
+        self.long_tag_values_format_label = label.SelectableLabel(self)
+        self.short_tag_values_format_label = label.SelectableLabel(self)
         self.indexed_label = label.SelectableLabel(self)
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.name_label, 1)
-        self.layout().addWidget(self.tag_values_format_label, 1)
+        self.layout().addWidget(self.long_tag_values_format_label, 1)
+        self.layout().addWidget(self.short_tag_values_format_label, 1)
         self.layout().addWidget(self.indexed_label, 0)
         self.on_update_language()
         self.on_update_settings()
@@ -33,12 +35,20 @@ class TagListHeader(QWidget):
 
     def on_update_language(self):
         self.name_label.setText(tr("Name"))
-        self.tag_values_format_label.setText(tr("Tag Values Format"))
+        self.long_tag_values_format_label.setText(
+            tr("Long Tag Values Format"),
+        )
+        self.short_tag_values_format_label.setText(
+            tr("Short Tag Values Format"),
+        )
         self.indexed_label.setText(tr("Indexed"))
         self.name_label.setAlignment(
             language.alignment | Qt.AlignmentFlag.AlignBottom,
         )
-        self.tag_values_format_label.setAlignment(
+        self.long_tag_values_format_label.setAlignment(
+            language.alignment | Qt.AlignmentFlag.AlignBottom,
+        )
+        self.short_tag_values_format_label.setAlignment(
             language.alignment | Qt.AlignmentFlag.AlignBottom,
         )
         self.indexed_label.setAlignment(
@@ -140,7 +150,7 @@ class TagListEdit(QWidget):
         ]
 
     def make_default_tag_data(self):
-        return None, "", False, ""
+        return None, "", False, "", ""
 
     def append_row(self, row_data):
         return self.insert_row(self.num_rows, row_data)
@@ -235,10 +245,12 @@ class TagEdit(QWidget):
         self.tag_id = None
         self.setLayout(QHBoxLayout())
         self.tag_name_line_edit = TagLineEdit(window)
-        self.tag_values_format_line_edit = TagLineEdit(window)
+        self.long_tag_values_format_line_edit = TagLineEdit(window)
+        self.short_tag_values_format_line_edit = TagLineEdit(window)
         self.indexed_check_box = UndoableCheckBox(window)
         self.layout().addWidget(self.tag_name_line_edit)
-        self.layout().addWidget(self.tag_values_format_line_edit)
+        self.layout().addWidget(self.long_tag_values_format_line_edit)
+        self.layout().addWidget(self.short_tag_values_format_line_edit)
         self.layout().addWidget(self.indexed_check_box)
         self.on_focus_range_change = lambda x, y: None
         self.on_geometry_change = lambda x: None
@@ -260,12 +272,22 @@ class TagEdit(QWidget):
         self.on_geometry_change(self)
 
     def set_row_data(self, row_data):
-        self.tag_id, tag_name, indexed, tag_values_format = row_data
+        (
+            self.tag_id,
+            tag_name,
+            indexed,
+            long_tag_values_format,
+            short_tag_values_format,
+        ) = row_data
         self.tag_name_line_edit.setText(tag_name)
-        self.tag_values_format_line_edit.setText(tag_values_format)
+        self.long_tag_values_format_line_edit.setText(long_tag_values_format)
+        self.short_tag_values_format_line_edit.setText(short_tag_values_format)
         self.indexed_check_box.setChecked(indexed)
         self.tag_name_line_edit.on_focus_range_change = self.focus_range_change
-        self.tag_values_format_line_edit.on_focus_range_change = (
+        self.long_tag_values_format_line_edit.on_focus_range_change = (
+            self.focus_range_change
+        )
+        self.short_tag_values_format_line_edit.on_focus_range_change = (
             self.focus_range_change
         )
 
@@ -274,21 +296,17 @@ class TagEdit(QWidget):
             self.tag_id,
             self.tag_name_line_edit.text(),
             self.indexed_check_box.isChecked(),
-            self.tag_values_format_line_edit.text(),
+            self.long_tag_values_format_line_edit.text(),
+            self.short_tag_values_format_line_edit.text(),
         )
-
-    def set_focus_down_creating_new_row_if_at_bottom(self):
-        layout = self.rows.layout()
-        focus_index = layout.indexOf(self) + 1
-        if focus_index == self.rows.num_rows:
-            self.rows.append_empty_row()
-        self.transfer_focus_to(layout.itemAt(focus_index).widget())
 
     def transfer_focus_to(self, other):
         if self.tag_name_line_edit.hasFocus():
             other.tag_name_line_edit.setFocus()
-        elif self.tag_values_format_line_edit.hasFocus():
-            other.tag_values_format_line_edit.setFocus()
+        elif self.long_tag_values_format_line_edit.hasFocus():
+            other.long_tag_values_format_line_edit.setFocus()
+        elif self.short_tag_values_format_line_edit.hasFocus():
+            other.short_tag_values_format_line_edit.setFocus()
         elif self.indexed_check_box.hasFocus():
             other.indexed_check_box.setFocus()
 
@@ -309,18 +327,26 @@ class TagEdit(QWidget):
         )
 
     def set_focus_left(self):
-        if self.tag_values_format_line_edit.hasFocus():
+        if self.short_tag_values_format_line_edit.hasFocus():
+            self.long_tag_values_format_line_edit.setFocus()
+        elif self.long_tag_values_format_line_edit.hasFocus():
             self.tag_name_line_edit.setFocus()
         elif self.tag_name_line_edit.hasFocus():
-            self.set_focus_right()
-            self.set_focus_up()
+            if self.rows.layout().indexOf(self) != 0:
+                self.set_focus_right()
+                self.set_focus_right()
+                self.set_focus_up()
 
     def set_focus_right(self):
         if self.tag_name_line_edit.hasFocus():
-            self.tag_values_format_line_edit.setFocus()
-        elif self.tag_values_format_line_edit.hasFocus():
-            self.set_focus_left()
-            self.set_focus_down()
+            self.long_tag_values_format_line_edit.setFocus()
+        elif self.long_tag_values_format_line_edit.hasFocus():
+            self.short_tag_values_format_line_edit.setFocus()
+        elif self.short_tag_values_format_line_edit.hasFocus():
+            if self.rows.layout().indexOf(self) != self.rows.num_rows - 1:
+                self.set_focus_left()
+                self.set_focus_left()
+                self.set_focus_down()
 
     def focus_range_change(self, y_min, y_max):
         y_min = y_min + self.y()
@@ -331,8 +357,20 @@ class TagEdit(QWidget):
         parent = self.parent()
         layout = parent.layout()
         index = layout.indexOf(self)
-        tag_id, tag_name, indexed, tag_values_format = self.get_row_data()
-        row_data = (None, tag_name, indexed, tag_values_format)
+        (
+            tag_id,
+            tag_name,
+            indexed,
+            long_tag_values_format,
+            short_tag_values_format,
+        ) = self.get_row_data()
+        row_data = (
+            None,
+            tag_name,
+            indexed,
+            long_tag_values_format,
+            short_tag_values_format,
+        )
 
         def redo():
             row = parent.insert_row(index + 1, row_data)
@@ -530,23 +568,24 @@ class TagLineEdit(line_edit.LineEdit):
 
     def keyPressEvent(self, event):
         key = event.key()
-        if key == Qt.Key.Key_Return:
-            self.parent().set_focus_down_creating_new_row_if_at_bottom()
-        elif key == Qt.Key.Key_Up:
-            self.parent().set_focus_up()
-        elif key == Qt.Key.Key_Down:
-            self.parent().set_focus_down()
-        elif key == Qt.Key.Key_Backtab:
-            self.parent().set_focus_left()
-        elif key == Qt.Key.Key_Tab:
-            self.parent().set_focus_right()
-        else:
-            if key in {Qt.Key.Key_Left, Qt.Key.Key_Right}:
-                self.prev_key_arrow = True
-            elif self.prev_key_arrow:
-                self.add_text_changes_to_undo_redo()
-                self.prev_key_arrow = False
-            super().keyPressEvent(event)
+        if event.modifiers() != Qt.KeyboardModifier.ControlModifier:
+            if key == Qt.Key.Key_Return:
+                self.parent().set_focus_down()
+            elif key == Qt.Key.Key_Up:
+                self.parent().set_focus_up()
+            elif key == Qt.Key.Key_Down:
+                self.parent().set_focus_down()
+            elif key == Qt.Key.Key_Backtab:
+                self.parent().set_focus_left()
+            elif key == Qt.Key.Key_Tab:
+                self.parent().set_focus_right()
+            else:
+                if key in {Qt.Key.Key_Left, Qt.Key.Key_Right}:
+                    self.prev_key_arrow = True
+                elif self.prev_key_arrow:
+                    self.add_text_changes_to_undo_redo()
+                    self.prev_key_arrow = False
+                super().keyPressEvent(event)
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)

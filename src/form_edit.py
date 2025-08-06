@@ -42,11 +42,13 @@ class FormEdit(selectable_frame.SelectableFrame):
         return [layout.itemAt(i).widget() for i in range(layout.count())]
 
     def contextMenuEvent(self, event):
-        try:
-            self.context_menu.move(event.globalPos())
-            self.context_menu.show()
-        except AttributeError:
-            pass
+        if not self.selected:
+            for row in self.parent().rows:
+                row.selected = False
+        self.setFocus()
+        self.selected = True
+        self.context_menu.move(event.globalPos())
+        self.context_menu.show()
 
     def focusOutEvent(self, event):
         super().focusOutEvent(event)
@@ -58,11 +60,6 @@ class FormEdit(selectable_frame.SelectableFrame):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.RightButton:
-            if not self.selected:
-                for row in self.parent().rows:
-                    row.selected = False
-            self.setFocus()
-            self.selected = True
             return
         if app.keyboardModifiers() == Qt.KeyboardModifier.ControlModifier:
             if self.selected:

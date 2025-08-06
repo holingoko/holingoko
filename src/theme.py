@@ -1,8 +1,9 @@
 import os
+import traceback
 
-from src import messages
+import natsort
+
 from src import settings
-from src.qt import *
 
 repo_dir = os.path.dirname(os.path.dirname(__file__))
 themes_dir = os.path.join(repo_dir, "resources", "themes")
@@ -19,7 +20,7 @@ def get_available_themes():
         theme, ext = os.path.splitext(file_name)
         if ext.lower() == ".qss":
             themes.append(theme)
-    return sorted(themes)
+    return natsort.natsorted(themes)
 
 
 style_sheet = None
@@ -46,19 +47,11 @@ def load_theme():
             ) as file:
                 style_sheet = file.read()
         except FileNotFoundError:
-            missing_theme = settings.app_theme
+            print(traceback.format_exc())
             settings.app_theme = settings.defaults["app_theme"]
             settings.save()
             load_theme()
-
-            def ensure_messages_module_loaded():
-                error_message = messages.MissingThemeErrorMessage(
-                    missing_theme
-                )
-                error_message.show()
-                error_message.move_to_center()
-
-            QTimer.singleShot(0, ensure_messages_module_loaded)
+            return
 
 
 load_theme()

@@ -68,15 +68,17 @@ def on_create_dict_database_file():
     db = dict_database.DictDatabase(path)
     default_indexed_tag = tr("Word")
     default_unindexed_tag = tr("Definition")
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"{{{default_indexed_tag}}}: {{{default_unindexed_tag}}}"
     )
+    db.info.set_short_entry_format("")
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(default_indexed_tag, True, "{{},... {}}", 0)
+    db.tags.create_tag(default_indexed_tag, True, "{{},... {}}", "", 0)
     db.tags.create_tag(
         default_unindexed_tag,
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         1,
     )
     if os.path.normpath(
