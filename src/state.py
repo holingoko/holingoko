@@ -60,7 +60,6 @@ def load():
 
 
 def reset():
-    state.clear()
     for key in keys:
         globals()[key] = defaults[key]
 

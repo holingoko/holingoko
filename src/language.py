@@ -1,5 +1,8 @@
 import os
 import re
+import traceback
+
+import natsort
 
 from src import app
 from src import dict_re
@@ -180,7 +183,7 @@ def get_available_languages():
         language, ext = os.path.splitext(file_name)
         if ext.lower() == ".po":
             languages.append(language)
-    return sorted(languages)
+    return natsort.natsorted(languages)
 
 
 def load_language():
@@ -205,15 +208,10 @@ def load_language():
             ) as file:
                 po_text = file.read()
         except FileNotFoundError:
-            missing_language = settings.app_language
+            print(traceback.format_exc())
             settings.app_language = settings.defaults["app_language"]
             settings.save()
             load_language()
-            error_message = messages.MissingLanguageErrorMessage(
-                missing_language
-            )
-            error_message.show()
-            error_message.move_to_center()
             return
     translations.clear()
     translations.update(get_translations(po_text))

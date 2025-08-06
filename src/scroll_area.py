@@ -235,7 +235,7 @@ class Trough(QWidget):
             self.pressed = True
             self.on_update_theme()
             if (
-                settings.text_editor_scroll_trough_behavior_on_press
+                settings.app_scroll_trough_behavior_on_press
                 == settings.ScrollTroughBehaviorOnPress.JUMP_TO
             ):
                 new_pos = press_position - bar.span / 2.0

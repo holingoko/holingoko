@@ -5,7 +5,6 @@ from src import dict_template_window
 from src import menus
 from src import settings
 from src import text_edit
-from src.language import tr
 from src.qt import *
 
 
@@ -86,14 +85,15 @@ class DictViewScrollbar(QWidget):
 
 
 class DictView(QWidget):
-    def __init__(self, db=None, show_outline=True, show_no_entries_text=True):
+    def __init__(self, db=None, show_outline=True, use_short_format=False):
         super().__init__()
-        self.context_menu = menus.DictViewContextMenu(self)
+        self.db = db
         if show_outline:
             self.text_edit = DictViewTextEdit(self)
         else:
             self.text_edit = PopupDictViewTextEdit(self)
-        self.show_no_entries_text = show_no_entries_text
+        self.use_short_format = use_short_format
+        self.context_menu = menus.DictViewContextMenu(self)
         self.text_edit.contextMenuEvent = self.contextMenuEvent
         self.text_edit.setVerticalScrollBar(
             DictViewScrollbarSignaler(self.text_edit)
@@ -104,7 +104,6 @@ class DictView(QWidget):
         self.layout().addWidget(self.text_edit)
         self.layout().setSpacing(0)
         self.layout().setContentsMargins(0, 0, 0, 0)
-        self.db = db
         self.formatter = None
         self.searcher = None
         self.entry_joiner = None
@@ -143,10 +142,36 @@ class DictView(QWidget):
         )
 
     def set_db_dependent_objects(self):
-        self.formatter = dict_format.Formatter(
-            self.db.info.get_entry_format(),
-            self.db.tags.get_all_tags(),
-        )
+        short_entry_format = self.db.info.get_short_entry_format()
+        long_entry_format = self.db.info.get_long_entry_format()
+        if self.use_short_format:
+            self.formatter = dict_format.Formatter(
+                short_entry_format or long_entry_format,
+                {
+                    tag_name: short_tag_values_format or long_tag_values_format
+                    for (
+                        _,
+                        tag_name,
+                        _,
+                        long_tag_values_format,
+                        short_tag_values_format,
+                    ) in self.db.tags.get_all_tags()
+                },
+            )
+        else:
+            self.formatter = dict_format.Formatter(
+                long_entry_format or short_entry_format,
+                {
+                    tag_name: long_tag_values_format or short_tag_values_format
+                    for (
+                        _,
+                        tag_name,
+                        _,
+                        long_tag_values_format,
+                        short_tag_values_format,
+                    ) in self.db.tags.get_all_tags()
+                },
+            )
         self.searcher = dict_search.Searcher(self.db)
         self.entry_joiner = self.db.info.get_entry_joiner()
         self.prev_html = None
@@ -182,17 +207,14 @@ class DictView(QWidget):
 
     def update_entries_(self, tag_id_to_tag_values_list):
         if not tag_id_to_tag_values_list:
-            if self.show_no_entries_text:
-                html = f'<div style="text-align: center;">{tr("No matching entries found.")}</div>'
-            else:
-                html = ""
+            html = ""
             if html != self.prev_html:
                 self.text_edit.setHtml(html)
                 self.prev_html = html
             return
         tag_id_to_tag_name = {
             tag_id: tag_name
-            for tag_id, tag_name, _, _ in self.db.tags.get_all_tags()
+            for tag_id, tag_name, _, _, _ in self.db.tags.get_all_tags()
         }
         tag_values_list = []
         for tag_id_to_tag_values in tag_id_to_tag_values_list:
@@ -239,4 +261,4 @@ class DictView(QWidget):
 
 class PopupDictView(DictView):
     def __init__(self, db):
-        super().__init__(db, show_outline=False)
+        super().__init__(db, show_outline=False, use_short_format=True)

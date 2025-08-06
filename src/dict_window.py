@@ -116,10 +116,7 @@ class DictWindow(window.Window):
             return
         self.db = dict_database.DictDatabase(path)
         self.dict_view.deleteLater()
-        self.dict_view = dict_view.DictView(
-            self.db,
-            show_no_entries_text=False,
-        )
+        self.dict_view = dict_view.DictView(self.db)
         self.dict_view_container.layout().addWidget(self.dict_view)
         self.on_search(self.search_line_edit.text())
 

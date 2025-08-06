@@ -309,6 +309,19 @@ class LengthUnitChoice(TranslatedChoice):
         )
 
 
+class ResetOptionChoice(TranslatedChoice):
+    def __init__(self, key, translated_text_fn):
+        super().__init__(
+            key,
+            translated_text_fn,
+            lambda: {
+                settings.ResetOption.OFF: tr("Off"),
+                settings.ResetOption.ONCE: tr("On Next Restart"),
+                settings.ResetOption.EVERY_TIME: tr("On Every Restart"),
+            },
+        )
+
+
 class OpenFileBehaviorChoice(TranslatedChoice):
     def __init__(self, key, translated_text_fn):
         super().__init__(

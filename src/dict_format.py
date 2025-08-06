@@ -1,13 +1,54 @@
+import traceback
+
 from src import dict_re
 
 
 class Formatter:
-    def __init__(self, entry_format, tag_rows):
-        self.entry_format = self.parse_entry_format(entry_format)
-        self.tag_values_format = {
+    def __init__(self, entry_format, tag_name_to_tag_values_format):
+        self.parsed_entry_format = self.parse_entry_format(entry_format)
+        self.tag_name_to_parsed_tag_values_format = {
             tag_name: self.parse_tag_values_format(tag_values_format)
-            for (_, tag_name, _, tag_values_format) in tag_rows
+            for tag_name, tag_values_format in tag_name_to_tag_values_format.items()
         }
+
+    @classmethod
+    def check_entry_format(cls, in_):
+        try:
+            parsed_entry_format = cls.parse_entry_format(in_)
+            conditionals = parsed_entry_format[1]
+            tag_sets = []
+            tags = set()
+            for conditional in conditionals:
+                tag_set = set()
+                for expression in conditional:
+                    tag_set.update(expression[1])
+                tag_sets.append(tag_set)
+                tags.update(tag_set)
+            tag_name_to_tag_values_format = {
+                tag_name: "{}" for tag_name in tags
+            }
+            formatter = cls(in_, tag_name_to_tag_values_format)
+            for tag_set in tag_sets:
+                tag_values = {tag_name: "tag_value" for tag_name in tag_set}
+                formatter.format(tag_values)
+            return True
+        except:
+            print(traceback.format_exc())
+            return False
+
+    @classmethod
+    def check_tag_values_format(cls, in_):
+        try:
+            tag_name = "tag_name"
+            formatter = cls(f"{{{tag_name}}}", {tag_name: in_})
+            max_possible_num_values = in_.count("{}")
+            for num_values in range(max_possible_num_values):
+                tag_values = {tag_name: [f"{i}" for i in range(num_values)]}
+                formatter.format(tag_values)
+            return True
+        except:
+            print(traceback.format_exc())
+            return False
 
     @staticmethod
     def parse_entry_format(in_):
@@ -57,7 +98,7 @@ class Formatter:
         return ""
 
     def format(self, tag_values):
-        format_string, conditionals = self.entry_format
+        format_string, conditionals = self.parsed_entry_format
         return dict_re.restore_non_tag_curly_braces(
             format_string.format(
                 *[
@@ -104,8 +145,10 @@ class Formatter:
         tag_name,
         tag_values,
     ):
-        conditionals = self.tag_values_format[tag_name]
-        for format_string, order_reversed in conditionals:
+        for (
+            format_string,
+            order_reversed,
+        ) in self.tag_name_to_parsed_tag_values_format[tag_name]:
             num_values = len(tag_values)
             expanded_format_string = (
                 dict_re.expand_tag_values_format_expression(

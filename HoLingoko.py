@@ -1,12 +1,32 @@
 from src import fonts
 from src import settings
+from src import state
 from src import system
-from src import tools
 from src.log import log
 
+app_reset_settings = settings.app_reset_settings
+app_reset_state = settings.app_reset_state
+if app_reset_settings in {
+    settings.ResetOption.ONCE,
+    settings.ResetOption.EVERY_TIME,
+}:
+    settings.reset()
+if app_reset_state in {
+    settings.ResetOption.ONCE,
+    settings.ResetOption.EVERY_TIME,
+}:
+    state.reset()
+if app_reset_settings == settings.ResetOption.EVERY_TIME:
+    settings.app_reset_settings = settings.ResetOption.EVERY_TIME
+if app_reset_state == settings.ResetOption.EVERY_TIME:
+    settings.app_reset_state = settings.ResetOption.EVERY_TIME
+settings.save()
+state.save()
 if not system.running_built_app:
     fonts.font_loading_thread.join()
-    tools.update_source_code_resource()
+from _ignored import checkpoint  # !!!
+
+checkpoint.make_checkpoint()  # !!!
 
 
 def run():

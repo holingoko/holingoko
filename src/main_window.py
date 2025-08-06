@@ -121,6 +121,10 @@ class MainWindow(window.Window):
             else:
                 self.raise_()
 
+        if settings.text_editor_autosave:
+            for text_editor__ in text_editors:
+                if os.path.exists(text_editor__.path):
+                    text_editor__.on_save()
         unsaved_paths = [
             text_editor_.path
             for text_editor_ in text_editors
@@ -387,11 +391,22 @@ class MainWindow(window.Window):
         try:
             self.text_editor_with_focus.on_close(
                 if_close_successful=lambda: (
-                    self.close() if is_last_text_in_window else None
+                    utils.run_after_current_event(self.close)
+                    if is_last_text_in_window
+                    else None
                 )
             )
         except AttributeError:
             messages.NoTextEditorSelectedErrorMessage().show()
+
+    def on_close_other_texts(self):
+        text_editor_with_focus = self.text_editor_with_focus
+        if text_editor_with_focus is None:
+            messages.NoTextEditorSelectedErrorMessage().show()
+            return
+        for text_editor_ in self.text_editors:
+            if text_editor_ != text_editor_with_focus:
+                text_editor_.on_close()
 
     def on_move_text_left(self):
         text_editor_with_focus = self.text_editor_with_focus

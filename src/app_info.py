@@ -1,6 +1,6 @@
 name = "HoLingoko"
 author = "HoLingoko"
-version = "0.9.0"
+version = "0.9.1"
 github = "https://github.com/holingoko/holingoko"
 db_ext = ".db"
 zip_ext = ".dic"

@@ -18,8 +18,10 @@ class Frame(QFrame):
         return getattr(self.widget, name)
 
     def contextMenuEvent(self, event):
+        self.setFocus()
         self.context_menu.move(event.globalPos())
         self.context_menu.show()
 
     def mousePressEvent(self, event):
-        self.setFocus()
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.setFocus()

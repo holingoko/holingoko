@@ -90,7 +90,7 @@ class Tests(unittest.TestCase):
         entry_id = self.db.entries.create_entry()
         indexed = True
         template = False
-        tag_id = self.db.tags.create_tag("Tag", indexed, "{{},... {}}", 0)
+        tag_id = self.db.tags.create_tag("Tag", indexed, "{{},... {}}", "", 0)
         tag_values_list = [["1" * i] for i in range(1, 11)]
         for order, tag_values in enumerate(tag_values_list):
             form_id = self.db.forms.create_form(entry_id, order)
@@ -137,7 +137,7 @@ class Tests(unittest.TestCase):
         entry_id = self.db.entries.create_entry()
         indexed = True
         template = False
-        tag_id = self.db.tags.create_tag("Tag", indexed, "{{},... {}}", 0)
+        tag_id = self.db.tags.create_tag("Tag", indexed, "{{},... {}}", "", 0)
         tag_values_list = [
             [""],
             ["abc"],
@@ -178,7 +178,7 @@ class Tests(unittest.TestCase):
         entry_id = self.db.entries.create_entry()
         indexed = True
         template = False
-        tag_id = self.db.tags.create_tag("Tag", indexed, "{{},... {}}", 0)
+        tag_id = self.db.tags.create_tag("Tag", indexed, "{{},... {}}", "", 0)
         tag_values_list = [
             ["word"],
             ["words"],
@@ -224,8 +224,12 @@ class Tests(unittest.TestCase):
         entry_id = self.db.entries.create_entry()
         indexed = False
         template = False
-        tag_id1 = self.db.tags.create_tag("Tag1", indexed, "{{},... {}}", 0)
-        tag_id2 = self.db.tags.create_tag("Tag2", indexed, "{{},... {}}", 1)
+        tag_id1 = self.db.tags.create_tag(
+            "Tag1", indexed, "{{},... {}}", "", 0
+        )
+        tag_id2 = self.db.tags.create_tag(
+            "Tag2", indexed, "{{},... {}}", "", 1
+        )
         tag_values_list = [
             (["0"], ["0"]),
             (["0"], ["3"]),

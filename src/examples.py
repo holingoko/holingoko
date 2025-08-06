@@ -9,6 +9,7 @@ from src import dict_settings_window
 from src import language
 from src import settings
 from src import state
+from src import text_editor
 from src import utils
 from src.language import tr
 from src.qt import *
@@ -109,7 +110,7 @@ def create_dictionary_english():
     name = tr("English Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("English")}}}</b><br>"
         f'{{{tr("Part Of Speech")}}}<br>'
         "{"
@@ -120,14 +121,15 @@ def create_dictionary_english():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("English"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Inflection"), False, "{{},... {}}", 2)
-    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", 3)
+    db.tags.create_tag(tr("English"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Inflection"), False, "{{},... {}}", "", 2)
+    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", "", 3)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         4,
     )
     return name, db
@@ -137,7 +139,7 @@ def create_dictionary_mandarin_chinese():
     name = tr("Mandarin Chinese Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"{{{tr("Traditional")}}}<br>"
         f"{{{tr("Simplified")}}}<br>"
         f"{{{tr("Pinyin")}}}<br>"
@@ -146,15 +148,16 @@ def create_dictionary_mandarin_chinese():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Traditional"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Simplified"), True, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Pinyin"), True, "{{},... {}}", 2)
-    db.tags.create_tag(tr("Zhuyin"), True, "{{},... {}}", 3)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 4)
+    db.tags.create_tag(tr("Traditional"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Simplified"), True, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Pinyin"), True, "{{},... {}}", "", 2)
+    db.tags.create_tag(tr("Zhuyin"), True, "{{},... {}}", "", 3)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 4)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         5,
     )
     return name, db
@@ -164,7 +167,7 @@ def create_dictionary_hindi():
     name = tr("Hindi Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("Hindi")}}}</b>"
         f"<p>{{{tr("Urdu")}}}</p>"
         f"{{{tr("Part Of Speech")}}}"
@@ -178,20 +181,35 @@ def create_dictionary_hindi():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Hindi"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Urdu"), True, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 2)
+    db.tags.create_tag(tr("Hindi"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Urdu"), True, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 2)
     db.tags.create_tag(
-        tr("Inflection"), False, "{<ul><li>{}</li>...<li>{}</li></ul>}", 3
+        tr("Inflection"),
+        False,
+        "{<ul><li>{}</li>...<li>{}</li></ul>}",
+        "",
+        3,
     )
-    db.tags.create_tag(tr("Base Form Hindi"), False, "{{},... {}}", 4)
     db.tags.create_tag(
-        tr("Base Form Urdu With Diacritics"), True, "{{},... {}}", 5
+        tr("Base Form Hindi"),
+        False,
+        "{{},... {}}",
+        "",
+        4,
+    )
+    db.tags.create_tag(
+        tr("Base Form Urdu With Diacritics"),
+        True,
+        "{{},... {}}",
+        "",
+        5,
     )
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         6,
     )
     return name, db
@@ -201,7 +219,7 @@ def create_dictionary_spanish():
     name = tr("Spanish Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("Spanish")}}}</b><br>"
         f'{{{tr("Part Of Speech")}}}<br>'
         "{"
@@ -212,14 +230,15 @@ def create_dictionary_spanish():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Spanish"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Inflection"), False, "{{},... {}}", 2)
-    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", 3)
+    db.tags.create_tag(tr("Spanish"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Inflection"), False, "{{},... {}}", "", 2)
+    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", "", 3)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         4,
     )
     return name, db
@@ -229,18 +248,19 @@ def create_dictionary_arabic():
     name = tr("Arabic Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<p><b>{{{tr("Arabic")}}}</b></p>"
         f"{{{tr("Part Of Speech")}}}"
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Arabic"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Part Of Speech"), True, "{{},... {}}", 1)
+    db.tags.create_tag(tr("Arabic"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Part Of Speech"), True, "{{},... {}}", "", 1)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         2,
     )
     return name, db
@@ -250,7 +270,7 @@ def create_dictionary_french():
     name = tr("French Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("French")}}}</b><br>"
         f'{{{tr("Part Of Speech")}}}<br>'
         "{"
@@ -261,14 +281,15 @@ def create_dictionary_french():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("French"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Inflection"), False, "{{},... {}}", 2)
-    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", 3)
+    db.tags.create_tag(tr("French"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Inflection"), False, "{{},... {}}", "", 2)
+    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", "", 3)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         4,
     )
     return name, db
@@ -278,18 +299,19 @@ def create_dictionary_bangla():
     name = tr("Bangla Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("Bangla")}}}</b><br>"
         f"{{{tr("Part Of Speech")}}}"
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Bangla"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 1)
+    db.tags.create_tag(tr("Bangla"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 1)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         2,
     )
     return name, db
@@ -299,7 +321,7 @@ def create_dictionary_portuguese():
     name = tr("Portuguese Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("Portuguese")}}}</b><br>"
         f'{{{tr("Part Of Speech")}}}<br>'
         "{"
@@ -310,14 +332,15 @@ def create_dictionary_portuguese():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Portuguese"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Inflection"), False, "{{},... {}}", 2)
-    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", 3)
+    db.tags.create_tag(tr("Portuguese"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Inflection"), False, "{{},... {}}", "", 2)
+    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", "", 3)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         4,
     )
     return name, db
@@ -327,7 +350,7 @@ def create_dictionary_russian():
     name = tr("Russian Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("Russian With Stress Marks")}}}</b><br>"
         f'{{{tr("Part Of Speech")}}}'
         "{"
@@ -339,19 +362,34 @@ def create_dictionary_russian():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Russian"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Russian With Stress Marks"), True, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 2)
+    db.tags.create_tag(tr("Russian"), True, "{{},... {}}", "", 0)
     db.tags.create_tag(
-        tr("Inflection"), False, "{<ul><li>{}</li>...<li>{}</li></ul>}", 3
+        tr("Russian With Stress Marks"),
+        True,
+        "{{},... {}}",
+        "",
+        1,
+    )
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 2)
+    db.tags.create_tag(
+        tr("Inflection"),
+        False,
+        "{<ul><li>{}</li>...<li>{}</li></ul>}",
+        "",
+        3,
     )
     db.tags.create_tag(
-        tr("Base Form With Stress Marks"), False, "{{},... {}}", 4
+        tr("Base Form With Stress Marks"),
+        False,
+        "{{},... {}}",
+        "",
+        4,
     )
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         5,
     )
     return name, db
@@ -361,18 +399,19 @@ def create_dictionary_indonesian():
     name = tr("Indonesian Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("Indonesian")}}}</b><br>"
         f"{{{tr("Part Of Speech")}}}"
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Indonesian"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 1)
+    db.tags.create_tag(tr("Indonesian"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 1)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         2,
     )
     return name, db
@@ -382,20 +421,21 @@ def create_dictionary_urdu():
     name = tr("Urdu Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<p><b>{{{tr("Urdu")}}}</b></p>"
         f"{{{tr("Hindi")}}}<br>"
         f"{{{tr("Part Of Speech")}}}"
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Urdu"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Hindi"), True, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Part Of Speech"), True, "{{},... {}}", 2)
+    db.tags.create_tag(tr("Urdu"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Hindi"), True, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Part Of Speech"), True, "{{},... {}}", "", 2)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         3,
     )
     return name, db
@@ -405,7 +445,7 @@ def create_dictionary_german():
     name = tr("German Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("German")}}}</b><br>"
         f'{{{tr("Part Of Speech")}}}'
         "{"
@@ -416,16 +456,21 @@ def create_dictionary_german():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("German"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 1)
+    db.tags.create_tag(tr("German"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 1)
     db.tags.create_tag(
-        tr("Inflection"), False, "{<ul><li>{}</li>...<li>{}</li></ul>}", 2
+        tr("Inflection"),
+        False,
+        "{<ul><li>{}</li>...<li>{}</li></ul>}",
+        "",
+        2,
     )
-    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", 3)
+    db.tags.create_tag(tr("Base Form"), False, "{{},... {}}", "", 3)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         4,
     )
     return name, db
@@ -435,7 +480,7 @@ def create_dictionary_japanese():
     name = tr("Japanese Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         "{"
         + f"{{{tr("Kanji")}}}<br>"
         + "}{"
@@ -447,14 +492,15 @@ def create_dictionary_japanese():
         + f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Kanji"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Hiragana"), True, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Katakana"), True, "{{},... {}}", 2)
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 3)
+    db.tags.create_tag(tr("Kanji"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Hiragana"), True, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Katakana"), True, "{{},... {}}", "", 2)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 3)
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         4,
     )
     return name, db
@@ -464,7 +510,7 @@ def create_dictionary_latin():
     name = tr("Latin Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"<b>{{{tr("Latin With Long Vowel Marks")}}}</b><br>"
         f"{{{tr("Part Of Speech")}}}"
         "{"
@@ -476,21 +522,34 @@ def create_dictionary_latin():
         f"{{{tr("Definitions")}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Latin"), True, "{{},... {}}", 0)
+    db.tags.create_tag(tr("Latin"), True, "{{},... {}}", "", 0)
     db.tags.create_tag(
-        tr("Latin With Long Vowel Marks"), True, "{{},... {}}", 1
+        tr("Latin With Long Vowel Marks"),
+        True,
+        "{{},... {}}",
+        "",
+        1,
     )
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 2)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 2)
     db.tags.create_tag(
-        tr("Inflection"), False, "{<ul><li>{}</li>...<li>{}</li></ul>}", 3
+        tr("Inflection"),
+        False,
+        "{<ul><li>{}</li>...<li>{}</li></ul>}",
+        "",
+        3,
     )
     db.tags.create_tag(
-        tr("Base Form With Long Vowel Marks"), False, "{{},... {}}", 4
+        tr("Base Form With Long Vowel Marks"),
+        False,
+        "{{},... {}}",
+        "",
+        4,
     )
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         5,
     )
     return name, db
@@ -500,17 +559,18 @@ def create_dictionary_latin_short():
     name = tr("Latin")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_short_entry_format(
         '<div style="font-family:Cardo; font-size:12pt">'
         f"{{{tr("Latin")}}} {{{tr("Info")}}}{{{tr("Definitions")}}}"
         "</div>"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Latin"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Info"), False, "{{},... {}}", 1)
+    db.tags.create_tag(tr("Latin"), True, "", "{{},... {}}", 0)
+    db.tags.create_tag(tr("Info"), False, "", "{{},... {}}", 1)
     db.tags.create_tag(
         tr("Definitions"),
         False,
+        "",
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
         2,
     )
@@ -521,7 +581,7 @@ def create_dictionary_latin_long():
     name = tr("Latin")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         '<div style="font-family:Cardo; font-size:12pt">'
         f"<b>{{{tr("Latin With Long Vowel Marks")}}}</b><br>"
         f"{{{tr("Part Of Speech")}}}"
@@ -535,21 +595,34 @@ def create_dictionary_latin_long():
         "</div>"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Latin"), True, "{{},... {}}", 0)
+    db.tags.create_tag(tr("Latin"), True, "{{},... {}}", "", 0)
     db.tags.create_tag(
-        tr("Latin With Long Vowel Marks"), True, "{{},... {}}", 1
+        tr("Latin With Long Vowel Marks"),
+        True,
+        "{{},... {}}",
+        "",
+        1,
     )
-    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", 2)
+    db.tags.create_tag(tr("Part Of Speech"), False, "{{},... {}}", "", 2)
     db.tags.create_tag(
-        tr("Inflection"), False, "{<ul><li>{}</li>...<li>{}</li></ul>}", 3
+        tr("Inflection"),
+        False,
+        "{<ul><li>{}</li>...<li>{}</li></ul>}",
+        "",
+        3,
     )
     db.tags.create_tag(
-        tr("Base Form With Long Vowel Marks"), False, "{{},... {}}", 4
+        tr("Base Form With Long Vowel Marks"),
+        False,
+        "{{},... {}}",
+        "",
+        4,
     )
     db.tags.create_tag(
         tr("Definitions"),
         False,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         5,
     )
     return name, db
@@ -2502,15 +2575,15 @@ def set_entry_format_simple():
     name = tr("Simple Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         tr("{0}: {1}").format(
             f"{{{tr("Tag 1")}}}",
             f"{{{tr("Tag 2")}}}",
         )
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Tag 1"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Tag 2"), False, "{{},... {}}", 1)
+    db.tags.create_tag(tr("Tag 1"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Tag 2"), False, "{{},... {}}", "", 1)
 
     entry_id = db.entries.create_entry()
     form_id = db.forms.create_form(entry_id, 0)
@@ -2549,12 +2622,12 @@ def set_entry_format_conditional_statements():
     condition3 = tr("Only {} is present.").format(
         f"{{{tr("Tag 2")}}}",
     )
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         f"{{{condition1}}}|{{{condition2}}}|{{{condition3}}}"
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Tag 1"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Tag 2"), False, "{{},... {}}", 1)
+    db.tags.create_tag(tr("Tag 1"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Tag 2"), False, "{{},... {}}", "", 1)
     entry_id = db.entries.create_entry()
     form_id1 = db.forms.create_form(entry_id, 0)
     form_id2 = db.forms.create_form(entry_id, 1)
@@ -2612,7 +2685,7 @@ def set_entry_format_html():
     name = tr("HTML Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         '<b>{0}</b><br><i>{1}</i><div style="color:#EE1111; background-color:#1111EE; font-family:Cardo; font-size:{3}pt"><b>{2}</b></div>'.format(
             f"{{{tr("Tag 1")}}}",
             f"{{{tr("Tag 2")}}}",
@@ -2621,9 +2694,9 @@ def set_entry_format_html():
         )
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Tag 1"), True, "{{},... {}}", 0)
-    db.tags.create_tag(tr("Tag 2"), True, "{{},... {}}", 1)
-    db.tags.create_tag(tr("Tag 3"), True, "{{},... {}}", 2)
+    db.tags.create_tag(tr("Tag 1"), True, "{{},... {}}", "", 0)
+    db.tags.create_tag(tr("Tag 2"), True, "{{},... {}}", "", 1)
+    db.tags.create_tag(tr("Tag 3"), True, "{{},... {}}", "", 2)
     entry_id = db.entries.create_entry()
     form_id = db.forms.create_form(entry_id, 0)
     tag_values_list = [
@@ -2658,11 +2731,11 @@ def set_entry_format_escaped_curly_braces():
     name = tr("Escaped Curly Braces Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(
+    db.info.set_long_entry_format(
         tr("{}").format(r"\{" + f"{{{tr("Tag")}}}" + r"\}")
     )
     db.info.set_entry_joiner("<hr>")
-    db.tags.create_tag(tr("Tag"), True, "{{},... {}}", 0)
+    db.tags.create_tag(tr("Tag"), True, "{{},... {}}", "", 0)
     entry_id = db.entries.create_entry()
     form_id = db.forms.create_form(entry_id, 0)
     tag_values_list = [
@@ -2683,12 +2756,13 @@ def set_tag_values_format_simple():
     name = tr("Simple Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(f"{{{tr("Tag")}}}")
+    db.info.set_long_entry_format(f"{{{tr("Tag")}}}")
     db.info.set_entry_joiner("<hr>")
     db.tags.create_tag(
         tr("Tag"),
         True,
         "{{},... {}}" + language.rtl_tag_or_empty_string,
+        "",
         0,
     )
     entry_id = db.entries.create_entry()
@@ -2734,13 +2808,14 @@ def set_tag_values_format_conditional_statements():
     name = tr("Conditional Statements Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(f"{{{tr("Tag")}}}")
+    db.info.set_long_entry_format(f"{{{tr("Tag")}}}")
     db.info.set_entry_joiner("<hr>")
     db.tags.create_tag(
         tr("Tag"),
         True,
         tr("{}|{{} and {}}|{{},... {}, and {}}")
         + language.rtl_tag_or_empty_string,
+        "",
         0,
     )
     entry_id = db.entries.create_entry()
@@ -2799,12 +2874,13 @@ def set_tag_values_format_html():
     name = tr("HTML Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(f"{{{tr("Tag")}}}")
+    db.info.set_long_entry_format(f"{{{tr("Tag")}}}")
     db.info.set_entry_joiner("<hr>")
     db.tags.create_tag(
         tr("Tag"),
         True,
         "{<ol><li>{}</li>...<li>{}</li></ol>}",
+        "",
         0,
     )
     entry_id = db.entries.create_entry()
@@ -2850,12 +2926,13 @@ def set_tag_values_format_escaped_ellipsis():
     name = tr("Escaped Ellipsis Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(f"{{{tr("Tag")}}}")
+    db.info.set_long_entry_format(f"{{{tr("Tag")}}}")
     db.info.set_entry_joiner("<hr>")
     db.tags.create_tag(
         tr("Tag"),
         True,
         r"{{},... {}\...}" + language.rtl_tag_or_empty_string,
+        "",
         0,
     )
     entry_id = db.entries.create_entry()
@@ -2882,12 +2959,13 @@ def set_tag_values_format_right_to_left_language():
     name = tr("Right To Left Language Example")
     path, name = create_new_dict_path_with_non_existing_name(name)
     db = dict_database.DictDatabase(path)
-    db.info.set_entry_format(f"{{{tr("Tag")}}}")
+    db.info.set_long_entry_format(f"{{{tr("Tag")}}}")
     db.info.set_entry_joiner("<hr>")
     db.tags.create_tag(
         tr("Tag"),
         True,
         "{{},... {}}{<-}",
+        "",
         0,
     )
     entry_id = db.entries.create_entry()
@@ -3041,14 +3119,19 @@ COMMENTARII_DE_BELLO_GALLICO_LIBER_I = """[1] Gallia est omnis divisa in partes 
 
 
 def translate_text_dictionary_popup():
-    pre_settings = settings.dict_()
     settings.dict_popup_show = True
-    settings.dict_side_bar_text_editor_show = False
-    settings.text_editor_window_default_num_views = 2
-
     from src import main_window
 
-    main_window = main_window.MainWindow()
+    main_window = main_window.MainWindow(
+        (
+            [
+                text_editor.TextEditor.default_state(),
+                text_editor.TextEditor.default_state(),
+            ],
+            None,
+            None,
+        )
+    )
     main_window.show()
     latin_text_editor, english_text_editor = main_window.text_editors
     latin_text_editor.path = "Commentarii de Bello Gallico, Liber I"
@@ -3116,21 +3199,23 @@ def translate_text_dictionary_popup():
     def fn():
         latin_text_editor.text_edit.text_edit.popup.show()
         latin_text_editor.text_edit.text_edit.pop_refresh()
-        for key in settings.keys:
-            setattr(settings, key, pre_settings[key])
 
     utils.run_after_current_event(fn)
 
 
 def translate_text_dictionary_side_bar():
-    pre_settings = settings.dict_()
-    settings.dict_popup_show = False
     settings.dict_side_bar_text_editor_show = True
-    settings.text_editor_window_default_num_views = 1
-
     from src import main_window
 
-    main_window = main_window.MainWindow()
+    main_window = main_window.MainWindow(
+        (
+            [
+                text_editor.TextEditor.default_state(),
+            ],
+            None,
+            None,
+        )
+    )
     main_window.show()
     latin_text_editor = main_window.text_editors[0]
     latin_text_editor.path = "Commentarii de Bello Gallico, Liber I"
@@ -3251,7 +3336,5 @@ def translate_text_dictionary_side_bar():
 
     def fn():
         latin_text_editor.text_edit.text_edit.side_bar_refresh()
-        for key in settings.keys:
-            setattr(settings, key, pre_settings[key])
 
     utils.run_after_current_event(fn)

@@ -59,6 +59,12 @@ class StartupWindow(enum.StrEnum):
     DICTIONARY_WINDOW = "DICTIONARY_WINDOW"
 
 
+class ResetOption(enum.StrEnum):
+    OFF = "OFF"
+    ONCE = "ONCE"
+    EVERY_TIME = "EVERY_TIME"
+
+
 class DictPopupDirection(enum.StrEnum):
     ABOVE = "ABOVE"
     BELOW = "BELOW"
@@ -159,6 +165,8 @@ app_num_recents = 10
 app_remember_window_geometry = True
 app_repeated_action_initial_delay = app.keyboardInputInterval()
 app_repeated_action_interval = 100
+app_reset_settings = ResetOption.OFF
+app_reset_state = ResetOption.OFF
 app_scale_sizes_by_device_pixel_ratio = True
 app_scroll_bar_min_length_rel_thickness = 3.0
 app_scroll_bar_opacity_hover = 0.7
@@ -168,7 +176,7 @@ app_scroll_trough_opacity_hover = 0.7
 app_scroll_trough_opacity_normal = 0.0
 app_scroll_trough_opacity_pressed = 0.8
 app_scroll_bar_visible = True
-app_scroll_trough_behavior_on_press = ScrollTroughBehaviorOnPress.CHANGE_PAGE
+app_scroll_trough_behavior_on_press = ScrollTroughBehaviorOnPress.JUMP_TO
 app_scroll_trough_thickness = 0.1718
 app_settings_window_default_width = 12.0
 app_settings_window_default_height = app_settings_window_default_width / PHI
@@ -200,7 +208,7 @@ dict_popup_show = True
 dict_popup_show_on = DictPopupShowOn.HOVER
 dict_popup_tri_height = 0.1181
 dict_popup_tri_width = 0.1718
-dict_settings_window_default_width = 9.5
+dict_settings_window_default_width = 11.0
 dict_settings_window_default_height = dict_settings_window_default_width / PHI
 dict_side_bar_entry_preview_show = True
 dict_side_bar_entry_preview_side = DictSideBarSide.RIGHT
@@ -228,7 +236,7 @@ text_editor_autosave = False
 text_editor_autosave_after_idle_interval = 2
 text_editor_behavior_on_drag_and_drop_file = OpenFileBehavior.REPLACE
 text_editor_behavior_on_new_text_file = OpenFileBehavior.INSERT
-text_editor_behavior_on_open_file = OpenFileBehavior.INSERT
+text_editor_behavior_on_open_file = OpenFileBehavior.REPLACE
 text_editor_font_family = system.system_font.family()
 text_editor_font_size = system.system_font.pointSize()
 text_editor_font_weight = FontWeight.NORMAL
@@ -279,7 +287,6 @@ def load():
 
 
 def reset():
-    settings.clear()
     for key in keys:
         globals()[key] = defaults[key]
 

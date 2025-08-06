@@ -94,7 +94,7 @@ class DictTemplateEntryWindow(window.Window):
         for form_id in form_ids:
             tag_row_data = []
             tag_values = self.db.tag_rows.get_tag_values_for_form(form_id)
-            for tag_id, tag_name, _, _ in self.db.tags.get_all_tags():
+            for tag_id, tag_name, _, _, _ in self.db.tags.get_all_tags():
                 try:
                     tag_values_for_tag_id = tag_values[tag_id]
                 except KeyError:

@@ -445,6 +445,16 @@ class ApplicationTab(Tab):
                     lambda: f"{tr("Repeated Action Interval /[ms/]")}",
                 ),
                 (
+                    settings_widgets.ResetOptionChoice,
+                    "app_reset_settings",
+                    lambda: f"{tr("Reset All Settings")}",
+                ),
+                (
+                    settings_widgets.ResetOptionChoice,
+                    "app_reset_state",
+                    lambda: f"{tr("Reset All State")}",
+                ),
+                (
                     settings_widgets.Bool,
                     "app_scale_sizes_by_device_pixel_ratio",
                     lambda: tr("Scale Sizes By Device Pixel Ratio"),
@@ -467,7 +477,7 @@ class ApplicationTab(Tab):
                 (
                     settings_widgets.ZeroToOneDouble,
                     "app_scroll_bar_opacity_pressed",
-                    lambda: tr("Scrollbar Trough Opacity When Pressed"),
+                    lambda: tr("Scrollbar Opacity When Pressed"),
                 ),
                 (
                     settings_widgets.ZeroToOneDouble,
@@ -482,7 +492,7 @@ class ApplicationTab(Tab):
                 (
                     settings_widgets.ZeroToOneDouble,
                     "app_scroll_trough_opacity_pressed",
-                    lambda: tr("Scrollbar Opacity When Pressed"),
+                    lambda: tr("Scrollbar Trough Opacity When Pressed"),
                 ),
                 (
                     settings_widgets.Bool,
@@ -779,7 +789,7 @@ class DictionaryTab(Tab):
                     lambda: tr("Action To Hide Popup"),
                 ),
                 (
-                    settings_widgets.NaturalInt,
+                    settings_widgets.PositiveInt,
                     "dict_popup_hover_delay",
                     lambda: tr("Popup Hover Delay /[ms/]"),
                 ),
@@ -859,7 +869,7 @@ class DictionaryTab(Tab):
                     lambda: tr("Entry Preview Side Bar Side"),
                 ),
                 (
-                    settings_widgets.NaturalInt,
+                    settings_widgets.PositiveInt,
                     "dict_side_bar_hover_delay",
                     lambda: tr("Side Bar Update Hover Delay /[ms/]"),
                 ),

@@ -13,22 +13,71 @@ unindexed_tag_values = [
 
 
 class Tests(unittest.TestCase):
+    def test_check_entry_format(self):
+        self.assertTrue(
+            dict_format.Formatter.check_entry_format("{tag1}|{tag2}")
+        )
+        self.assertFalse(
+            dict_format.Formatter.check_entry_format("{tag1|{tag2}")
+        )
+        self.assertFalse(
+            dict_format.Formatter.check_entry_format("{tag1}|{tag2}}")
+        )
+
+    def test_check_tag_values_format(self):
+        self.assertTrue(
+            dict_format.Formatter.check_tag_values_format("{{},... {}}")
+        )
+        self.assertFalse(dict_format.Formatter.check_tag_values_format("{{}"))
+        self.assertFalse(
+            dict_format.Formatter.check_tag_values_format("{},... {}")
+        )
+        self.assertFalse(
+            dict_format.Formatter.check_tag_values_format("{{},... {}}!!!")
+        )
+        self.assertTrue(
+            dict_format.Formatter.check_tag_values_format("{{},... {}!!!}")
+        )
+        self.assertTrue(
+            dict_format.Formatter.check_tag_values_format("{{}}|{{}{}}")
+        )
+        self.assertFalse(
+            dict_format.Formatter.check_tag_values_format("{{}}|{{{}{}}")
+        )
+        self.assertFalse(
+            dict_format.Formatter.check_tag_values_format("{{}}|{{}{}}}")
+        )
+
     def test_formatter_simple_colon_ordered_list(self):
         entry_format = f"{{{indexed_tag}}}: {{{unindexed_tag}}}"
         tags = [
-            (1, indexed_tag, True, "{{},... {}}"),
+            (1, indexed_tag, True, "{{},... {}}", ""),
             (
                 2,
                 unindexed_tag,
                 False,
                 "{<ol><li>{}</li>...<li>{}</li></ol>}",
+                "",
             ),
         ]
         tag_values = [
             (1, indexed_tag, indexed_tag_values),
             (2, unindexed_tag, unindexed_tag_values),
         ]
-        formatter = dict_format.Formatter(entry_format, tags)
+        tag_name_to_tag_values_format = {
+            tag_name: long_tag_values_format
+            for (
+                _,
+                tag_name,
+                _,
+                long_tag_values_format,
+                _,
+            ) in tags
+        }
+        formatter = dict_format.Formatter(
+            entry_format,
+            tag_name_to_tag_values_format,
+        )
         tag_values_ = {key: values for _, key, values in tag_values}
         calculated = formatter.format(tag_values_)
         expected = "{}: <ol><li>{}</li><li>{}</li><li>{}</li></ol>".format(
@@ -40,19 +89,33 @@ class Tests(unittest.TestCase):
     def test_formatter_simple_bold_comma_italics_semicolon(self):
         entry_format = f"<b>{{{indexed_tag}}}</b>, <i>{{{unindexed_tag}}}</i>"
         tags = [
-            (1, indexed_tag, True, "{{},... {}}"),
+            (1, indexed_tag, True, "{{},... {}}", ""),
             (
                 2,
                 unindexed_tag,
                 False,
                 "{{};... {}.}",
+                "",
             ),
         ]
         tag_values = [
             (1, indexed_tag, indexed_tag_values),
             (2, unindexed_tag, unindexed_tag_values),
         ]
-        formatter = dict_format.Formatter(entry_format, tags)
+        tag_name_to_tag_values_format = {
+            tag_name: long_tag_values_format
+            for (
+                _,
+                tag_name,
+                _,
+                long_tag_values_format,
+                _,
+            ) in tags
+        }
+        formatter = dict_format.Formatter(
+            entry_format,
+            tag_name_to_tag_values_format,
+        )
         tag_values_ = {key: values for _, key, values in tag_values}
         calculated = formatter.format(tag_values_)
         expected = "<b>{}</b>, <i>definition 1; definition 2; definition 3.</i>".format(
@@ -62,17 +125,33 @@ class Tests(unittest.TestCase):
         self.assertEqual(calculated, expected)
 
     def test_formatter_missing_tags_empty(self):
-        entry_format = f"{{<b>{{{indexed_tag}}}</b>, <i>{{{unindexed_tag}}}</i>}}"
+        entry_format = (
+            f"{{<b>{{{indexed_tag}}}</b>, <i>{{{unindexed_tag}}}</i>}}"
+        )
         tags = [
-            (1, indexed_tag, True, "{{},... {}}"),
+            (1, indexed_tag, True, "{{},... {}}", ""),
             (
                 2,
                 unindexed_tag,
                 False,
                 "{{};... {}.}",
+                "",
             ),
         ]
-        formatter = dict_format.Formatter(entry_format, tags)
+        tag_name_to_tag_values_format = {
+            tag_name: long_tag_values_format
+            for (
+                _,
+                tag_name,
+                _,
+                long_tag_values_format,
+                _,
+            ) in tags
+        }
+        formatter = dict_format.Formatter(
+            entry_format,
+            tag_name_to_tag_values_format,
+        )
         tag_values_list = [
             {
                 indexed_tag: [],
@@ -180,7 +259,9 @@ class Tests(unittest.TestCase):
         tag2 = "tag2"
         tag3 = "tag3"
         tag4 = "tag4"
-        entry_format = "{{" + tag1 + "}{" + tag2 + "}}|{" + tag3 + "}{" + tag4 + "}"
+        entry_format = (
+            "{{" + tag1 + "}{" + tag2 + "}}|{" + tag3 + "}{" + tag4 + "}"
+        )
         calculated = dict_format.Formatter.entry_format_tags(entry_format)
         expected = {tag1, tag2, tag3, tag4}
         self.assertEqual(calculated, expected)
