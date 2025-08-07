@@ -757,6 +757,8 @@ class _UndoableCheckBox(QCheckBox):
             self.window.undo_redo.do(undo, redo)
 
 
+# Wrapping check box within another class like this is pointless on Windows
+# but prevents widget alignment issues when using Mac OS native system buttons.
 class UndoableCheckBox(QWidget):
     def __init__(self, window):
         super().__init__()

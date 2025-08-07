@@ -31,9 +31,13 @@ class Application(QApplication):
                 self.mouse_event_widget.global_mouse_double_click_event(event)
         if getattr(watched, "is_window", False):
             event_type = event.type()
+            # ShortcutOverride events are duplicated on Mac OS. The duplicate
+            # event has a timestamp of zero so can be filtered out. Checking
+            # for non-zero timestamp is pointless on Windows.
             if (
                 event_type == QEvent.Type.ShortcutOverride
                 and not self.ignore_shortcuts
+                and event.timestamp() != 0
             ):
                 key_sequence = (
                     QKeySequence(event.keyCombination())
